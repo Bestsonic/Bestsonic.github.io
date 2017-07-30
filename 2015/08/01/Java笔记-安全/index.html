@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>Java笔记-安全 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,安全">
+    <meta name="description" content="安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安全性的话题可能没那么陌生，用户认证和授权可能是绝大部分Web应用都有的功能。类似Spring Security这样的框架，也使得开发变得更加简单。本文并不会讨论Web应用的安全性，而是介绍Java安全一些底层和基本的内容。">
+<meta name="keywords" content="Java,安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java笔记-安全">
+<meta property="og:url" content="http://bestsonic.github.io/2015/08/01/Java笔记-安全/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安全性的话题可能没那么陌生，用户认证和授权可能是绝大部分Web应用都有的功能。类似Spring Security这样的框架，也使得开发变得更加简单。本文并不会讨论Web应用的安全性，而是介绍Java安全一些底层和基本的内容。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-30T07:00:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java笔记-安全">
+<meta name="twitter:description" content="安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安全性的话题可能没那么陌生，用户认证和授权可能是绝大部分Web应用都有的功能。类似Spring Security这样的框架，也使得开发变得更加简单。本文并不会讨论Web应用的安全性，而是介绍Java安全一些底层和基本的内容。">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java笔记-安全</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java笔记-安全</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-08-01T02:45:00.000Z" itemprop="datePublished" class="page-time">
+  2015-08-01
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#认证"><span class="post-toc-number">1.</span> <span class="post-toc-text">认证</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#权限控制"><span class="post-toc-number">2.</span> <span class="post-toc-text">权限控制</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#加密、解密与签名"><span class="post-toc-number">3.</span> <span class="post-toc-text">加密、解密与签名</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#安全套接字连接"><span class="post-toc-number">4.</span> <span class="post-toc-text">安全套接字连接</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">5.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Java笔记-安全"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java笔记-安全</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-08-01 10:45:00" datetime="2015-08-01T02:45:00.000Z"  itemprop="datePublished">2015-08-01</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安全性的话题可能没那么陌生，<strong>用户认证</strong>和<strong>授权</strong>可能是绝大部分Web应用都有的功能。类似<a href="http://static.springsource.org/spring-security/site/" target="_blank" rel="external">Spring Security</a>这样的框架，也使得开发变得更加简单。本文并不会讨论Web应用的安全性，而是介绍Java安全一些<strong>底层</strong>和<strong>基本</strong>的内容。</p>
+<a id="more"></a>
+<h1 id="认证"><a href="#认证" class="headerlink" title="认证"></a><strong>认证</strong></h1><hr>
+<p>用户认证是应用安全性的重要组成部分，其目的是确保应用的使用者具有合法的身份。 Java安全中使用术语<strong>主体</strong>（<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/Subject.html" target="_blank" rel="external">Subject</a>）来表示<strong>访问请求的来源</strong>。一个主体可以是任何的实体。一个主体可以有多个不同的<strong>身份标识</strong>（<a href="http://download.oracle.com/javase/6/docs/api/java/security/Principal.html" target="_blank" rel="external">Principal</a>）。比如一个应用的用户这类主体，就可以有用户名、身份证号码和手机号码等多种身份标识。除了身份标识之外，一个主体还可以有公开或是私有的<strong>安全相关的凭证</strong>（<a href="http://en.wikipedia.org/wiki/Credential" target="_blank" rel="external">Credential</a>），包括密码和密钥等。</p>
+<p>典型的用户认证过程是通过登录操作来完成的。在登录成功之后，一个主体中就具备了相应的身份标识。Java提供了一个可扩展的登录框架，使得应用开发人员可以很容易的定制和扩展与登录相关的逻辑。登录的过程由<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/login/LoginContext.html" target="_blank" rel="external">LoginContext</a>启动。在创建LoginContext的时候需要指定一个登录配置（<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/login/Configuration.html" target="_blank" rel="external">Configuration</a>）的名称。该登录配置中包含了登录所需的多个<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/spi/LoginModule.html" target="_blank" rel="external">LoginModule</a>的信息。每个LoginModule实现了一种登录方式。当调用LoginContext的<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/login/LoginContext.html#login%28%29" target="_blank" rel="external">login</a>方法的时候，所配置的每个LoginModule会被调用来执行登录操作。如果整个登录过程成功，则通过<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/login/LoginContext.html#getSubject%28%29" target="_blank" rel="external">getSubject</a>方法就可以获取到包含了身份标识信息的主体。开发人员可以实现自己的LoginModule来定制不同的登录逻辑。</p>
+<p>每个LoginModule的登录方式由两个阶段组成。第一个阶段是在<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/spi/LoginModule.html#login%28%29" target="_blank" rel="external">login</a>方法的实现中。这个阶段用来进行必要的身份认证，可能需要获取用户的输入，以及通过数据库、网络操作或其它方式来完成认证。当认证成功之后，把必要的信息保存起来。如果认证失败，则抛出相关的异常。第二阶段是在<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/spi/LoginModule.html#commit%28%29" target="_blank" rel="external">commit</a>或<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/spi/LoginModule.html#abort%28%29" target="_blank" rel="external">abort</a>方法中。由于一个登录过程可能涉及到多个LoginModule。LoginContext会根据每个LoginModule的认证结果以及相关的配置信息来确定本次登录是否成功。LoginContext用来判断的依据是每个LoginModule对整个登录过程的必要性，分成必需、必要、充分和可选这四种情况。如果登录成功，则每个LoginModule的commit方法会被调用，用来把身份标识关联到主体上。如果登录失败，则LoginModule 的abort方法会被调用，用来清除之前保存的认证相关信息。</p>
+<p>在LoginModule进行认证的过程中，如果需要获取用户的输入，可以通过<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/callback/CallbackHandler.html" target="_blank" rel="external">CallbackHandler</a>和对应的Callback来完成。每个<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/callback/Callback.html" target="_blank" rel="external">Callback</a>可以用来进行必要的数据传递。典型的启动登录的过程如下：</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function">Subject <span class="title">login</span><span class="params">()</span> <span class="keyword">throws</span> LoginException </span>&#123;    </div><div class="line">	TextInputCallbackHandler callbackHandler = <span class="keyword">new</span> TextInputCallbackHandler();    </div><div class="line">	LoginContext lc = <span class="keyword">new</span> LoginContext(<span class="string">"SmsApp"</span>, callbackHandler);    </div><div class="line">	lc.login();    </div><div class="line">	<span class="function"><span class="keyword">return</span> lc.<span class="title">getSubject</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里的SmsApp是登录配置的名称，可以在配置文件中找到。该配置文件的内容也很简单。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SmsApp &#123;    </div><div class="line">	security.login.SmsLoginModule required<span class="comment">;</span></div><div class="line">&#125;<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>这里声明了使用security.login.SmsLoginModule这个登录模块，而且该模块是必需的。配置文件可以通过启动程序时的参数java.security.auth.login.config来指定，或修改JVM的默认设置。下面看看SmsLoginModule的核心方法login和commit。</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">login</span><span class="params">()</span> <span class="keyword">throws</span> LoginException </span>&#123;    </div><div class="line">	TextInputCallback phoneInputCallback = <span class="keyword">new</span> TextInputCallback(<span class="string">"Phone number: "</span>);    </div><div class="line">	TextInputCallback smsInputCallback = <span class="keyword">new</span> TextInputCallback(<span class="string">"Code: "</span>);    </div><div class="line">	<span class="keyword">try</span> &#123;        </div><div class="line">		<span class="keyword">handler</span>.handle(<span class="keyword">new</span> Callback[] &#123;phoneInputCallback, smsInputCallback&#125;);    </div><div class="line">	&#125; <span class="keyword">catch</span> (Exception e) &#123;        </div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> LoginException(e.getMessage());    </div><div class="line">	&#125;     </div><div class="line">	String code = smsInputCallback.getText();    </div><div class="line">	<span class="keyword">boolean</span> isValid = code.length() &gt; <span class="number">3</span>; <span class="comment">//此处只是简单的进行验证。   </span></div><div class="line">	<span class="keyword">if</span> (isValid) &#123;        </div><div class="line">		phoneNumber = phoneInputCallback.getText();    </div><div class="line">	&#125;    </div><div class="line">	<span class="keyword">return</span> isValid;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">boolean</span> <span class="title">commit</span><span class="params">()</span> <span class="keyword">throws</span> LoginException </span>&#123;    </div><div class="line">	<span class="keyword">if</span> (phoneNumber != <span class="keyword">null</span>) &#123;        </div><div class="line">	subject.getPrincipals().add(<span class="keyword">new</span> PhonePrincipal(phoneNumber));       </div><div class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;    </div><div class="line">	&#125;    </div><div class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里使用了两个<a href="http://download.oracle.com/javase/6/docs/api/javax/security/auth/callback/TextInputCallback.html" target="_blank" rel="external">TextInputCallback</a>来获取用户的输入。当用户输入的编码有效的时候，就把相关的信息记录下来，此处是用户的手机号码。在commit方法中，就把该手机号码作为用户的身份标识与主体关联起来。</p>
+<h1 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a><strong>权限控制</strong></h1><hr>
+<p>在验证了访问请求来源的合法身份之后，另一项工作是验证其是否具有相应的权限。权限由<a href="http://download.oracle.com/javase/6/docs/api/java/security/Permission.html" target="_blank" rel="external"><strong>Permission</strong></a>及其子类来表示。每个权限都有一个<strong>名称</strong>，该名称的含义与权限类型相关。某些权限有与之对应的<strong>动作列表</strong>。比较典型的是文件操作权限<a href="http://download.oracle.com/javase/6/docs/api/java/io/FilePermission.html" target="_blank" rel="external">FilePermission</a>，它的名称是文件的路径，而它的动作列表则包括读取、写入和执行等。Permission类中最重要的是<a href="http://download.oracle.com/javase/6/docs/api/java/security/Permission.html#implies%28java.security.Permission%29" target="_blank" rel="external"><strong>implies</strong></a>方法，它定义了权限之间的包含关系，是进行验证的基础。</p>
+<p><strong>权限控制包括管理和验证两个部分。</strong>管理指的是定义应用中的权限控制策略，而验证指的则是在运行时刻根据策略来判断某次请求是否合法。策略可以与主体关联，也可以没有关联。策略由<a href="http://download.oracle.com/javase/6/docs/api/java/security/Policy.html" target="_blank" rel="external">Policy</a>来表示，JDK提供了基于文件存储的基本实现。开发人员也可以提供自己的实现。在应用运行过程中，只可能有一个Policy处于生效的状态。验证部分的具体执行者是<a href="http://download.oracle.com/javase/6/docs/api/java/security/AccessController.html" target="_blank" rel="external">AccessController</a>，其中的<a href="http://download.oracle.com/javase/6/docs/api/java/security/AccessController.html#checkPermission%28java.security.Permission%29" target="_blank" rel="external">checkPermission</a>方法用来验证给定的权限是否被允许。<strong>在应用中执行相关的访问请求之前，都需要调用checkPermission方法来进行验证。</strong>如果验证失败的话，该方法会抛出<a href="http://download.oracle.com/javase/6/docs/api/java/security/AccessControlException.html" target="_blank" rel="external">AccessControlException</a>异常。 JVM中内置提供了一些对访问关键部分内容的访问控制检查，不过<strong>只有在启动应用的时通过参数-Djava.security.manager启用了安全管理器之后才能生效</strong>，并与策略相配合。</p>
+<p>与访问控制相关的另外一个概念是特权动作。特权动作只关心动作本身所要求的权限是否具备，而并不关心调用者是谁。比如一个写入文件的特权动作，它只要求对该文件有写入权限即可，并不关心是谁要求它执行这样的动作。特权动作根据是否抛出受检异常，分为<a href="http://download.oracle.com/javase/6/docs/api/java/security/PrivilegedAction.html" target="_blank" rel="external">PrivilegedAction</a>和<a href="http://download.oracle.com/javase/6/docs/api/java/security/PrivilegedExceptionAction.html" target="_blank" rel="external">PrivilegedExceptionAction</a>。这两个接口都只有一个run方法用来执行相关的动作，也可以向调用者返回结果。通过AccessController的doPrivileged方法就可以执行特权动作。</p>
+<p>Java安全使用了保护域的概念。每个保护域都包含一组类、身份标识和权限，其意义是在当访问请求的来源是这些身份标识的时候，这些类的实例就自动具有给定的这些权限。保护域的权限既可以是固定，也可以根据策略来动态变化。<a href="http://download.oracle.com/javase/6/docs/api/java/security/ProtectionDomain.html" target="_blank" rel="external">ProtectionDomain</a>类用来表示保护域，它的两个构造方法分别用来支持静态和动态的权限。一般来说，应用程序通常会涉及到系统保护域和应用保护域。不少的方法调用可能会跨越多个保护域的边界。因此，在AccessController进行访问控制验证的时候，需要考虑当前操作的调用上下文，主要指的是方法调用栈上不同方法所属于的不同保护域。这个调用上下文一般是与当前线程绑定在一起的。通过AccessController的<a href="http://download.oracle.com/javase/6/docs/api/java/security/AccessController.html#getContext%28%29" target="_blank" rel="external">getContext</a>方法可以获取到表示调用上下文的<a href="http://download.oracle.com/javase/6/docs/api/java/security/AccessControlContext.html" target="_blank" rel="external">AccessControlContext</a>对象，相当于访问控制验证所需的调用栈的一个快照。在有些情况下，会需要传递此对象以方便在其它线程中进行访问控制验证。</p>
+<p>考虑下面的权限验证代码：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Subject subject = <span class="keyword">new</span> <span class="type">Subject</span>();</div><div class="line">ViewerPrincipal principal = <span class="keyword">new</span> <span class="type">ViewerPrincipal</span>(<span class="string">"Alex"</span>);</div><div class="line">subject.getPrincipals().add(principal);</div><div class="line">Subject.doAsPrivileged(subject, <span class="keyword">new</span> <span class="type">PrivilegedAction</span>&lt;Object&gt;() &#123;    </div><div class="line">	<span class="keyword">public</span> Object run() &#123;       </div><div class="line">		<span class="keyword">new</span> <span class="type">Viewer</span>().view();        </div><div class="line">		<span class="keyword">return</span> <span class="literal">null</span>;   </div><div class="line">	&#125;</div><div class="line">&#125;, <span class="literal">null</span>);</div></pre></td></tr></table></figure>
+<p>这里创建了一个新的Subject对象并关联上身份标识。通常来说，这个过程是由登录操作来完成的。通过Subject的doAsPrivileged方法就可以执行一个特权动作。Viewer对象的view方法会使用AccessController来检查是否具有相应的权限。策略配置文件的内容也比较简单，在启动程序的时候通过参数java.security.auth.policy指定文件路径即可。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">grant Principal security.access.ViewerPrincipal <span class="string">"Alex"</span> &#123;</div><div class="line">	permission security.access.ViewPermission <span class="string">"CONFIDENTIAL"</span><span class="comment">;</span></div><div class="line">&#125;<span class="comment">; //这里把名称为CONFIDENTIAL的ViewPermission授权给了身份标识为Alex的主体。</span></div></pre></td></tr></table></figure>
+<h1 id="加密、解密与签名"><a href="#加密、解密与签名" class="headerlink" title="加密、解密与签名"></a><strong>加密、解密与签名</strong></h1><hr>
+<p>构建安全的Java应用离不开加密和解密。Java的密码框架采用了常见的服务提供者架构，以提供所需的可扩展性和互操作性。该密码框架提供了一系列常用的服务，包括<strong>加密、数字签名和报文摘要等</strong>。这些服务都有服务提供者接口（<a href="http://en.wikipedia.org/wiki/Service_provider_interface" target="_blank" rel="external">SPI</a>），服务的实现者只需要实现这些接口，并注册到密码框架中即可。比如<strong>加密服务<a href="http://download.oracle.com/javase/6/docs/api/javax/crypto/Cipher.html" target="_blank" rel="external">Cipher</a>的SPI接口就是<a href="http://download.oracle.com/javase/6/docs/api/javax/crypto/CipherSpi.html" target="_blank" rel="external">CipherSpi</a></strong>。每个服务都可以有不同的算法来实现。密码框架也提供了相应的工厂方法用来获取到服务的实例。<strong>比如想使用采用MD5算法的报文摘要服务，只需要调用MessageDigest.getInstance(“MD5”)即可。</strong></p>
+<p>加密和解密过程中并不可少的就是密钥（<a href="http://download.oracle.com/javase/6/docs/api/java/security/Key.html" target="_blank" rel="external">Key</a>）。加密算法一般分成<strong>对称和非对称</strong>两种。<strong><a href="http://baike.baidu.com/view/119320.htm" target="_blank" rel="external">对称加密算法</a>使用同一个密钥进行加密和解密；而<a href="http://baike.baidu.com/view/7595.htm" target="_blank" rel="external">非对称加密算法</a>使用一对公钥和私钥，一个加密的时候，另外一个就用来解密。</strong>不同的加密算法，有不同的密钥。对称加密算法使用的是<a href="http://download.oracle.com/javase/6/docs/api/javax/crypto/SecretKey.html" target="_blank" rel="external">SecretKey</a>，而非对称加密算法则使用<a href="http://download.oracle.com/javase/6/docs/api/java/security/PublicKey.html" target="_blank" rel="external">PublicKey</a>和<a href="http://download.oracle.com/javase/6/docs/api/java/security/PrivateKey.html" target="_blank" rel="external">PrivateKey</a>。与密钥Key对应的另一个接口是<a href="http://download.oracle.com/javase/6/docs/api/java/security/spec/KeySpec.html" target="_blank" rel="external">KeySpec</a>，用来描述不同算法的密钥的具体内容。比如<strong>一个典型的使用对称加密的方式(DES)</strong>如下：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">KeyGenerator generator = KeyGenerator.getInstance(<span class="string">"DES"</span>)<span class="comment">;</span></div><div class="line">SecretKey key = generator.generateKey()<span class="comment">;</span></div><div class="line">saveFile(<span class="string">"key.data"</span>, key.getEncoded())<span class="comment">;</span></div><div class="line">Cipher cipher = Cipher.getInstance(<span class="string">"DES"</span>)<span class="comment">;</span></div><div class="line">cipher.init(Cipher.ENCRYPT_MODE, key)<span class="comment">;</span></div><div class="line">String text = <span class="string">"Hello World"</span><span class="comment">;</span></div><div class="line"><span class="keyword">byte[] </span>encrypted = cipher.doFinal(text.getBytes())<span class="comment">;</span></div><div class="line">saveFile(<span class="string">"encrypted.bin"</span>, encrypted)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>加密的时候首先要生成一个密钥，再由Cipher服务来完成。可以把密钥的内容保存起来，方便传递给需要解密的程序。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">byte[] </span>keyData = getData(<span class="string">"key.data"</span>)<span class="comment">;</span></div><div class="line">SecretKeySpec keySpec = new SecretKeySpec(keyData, <span class="string">"DES"</span>)<span class="comment">;</span></div><div class="line">Cipher cipher = Cipher.getInstance(<span class="string">"DES"</span>)<span class="comment">;</span></div><div class="line">cipher.init(Cipher.DECRYPT_MODE, keySpec)<span class="comment">;</span></div><div class="line"><span class="keyword">byte[] </span>data = getData(<span class="string">"encrypted.bin"</span>)<span class="comment">;</span></div><div class="line"><span class="keyword">byte[] </span>result = cipher.doFinal(data)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>解密的时候先从保存的文件中得到密钥编码之后的内容，再通过<a href="http://download.oracle.com/javase/6/docs/api/javax/crypto/spec/SecretKeySpec.html" target="_blank" rel="external">SecretKeySpec</a>获取到密钥本身的内容，再进行解密。</p>
+<p><strong><a href="http://baike.baidu.com/view/4971320.htm" target="_blank" rel="external">报文摘要</a>的目的在于防止信息被有意或无意的修改。</strong>通过对原始数据应用某些算法，可以得到一个校验码。当收到数据之后，只需要应用同样的算法，再比较校验码是否一致，就可以判断数据是否被修改过。相对原始数据来说，校验码长度更小，更容易进行比较。消息认证码（<a href="http://en.wikipedia.org/wiki/Message_authentication_code" target="_blank" rel="external">Message Authentication Code</a>）与报文摘要类似，<strong>不同的是计算的过程中加入了密钥，只有掌握了密钥的接收者才能验证数据的完整性。</strong></p>
+<p>使用公钥和私钥就可以实现数字签名的功能。<strong>某个发送者使用私钥对消息进行加密，接收者使用公钥进行解密。</strong>由于私钥只有发送者知道，当接收者使用公钥解密成功之后，就可以判定消息的来源肯定是特定的发送者。这就相当于发送者对消息进行了签名。数字签名由<a href="http://download.oracle.com/javase/6/docs/api/java/security/Signature.html" target="_blank" rel="external">Signature</a>服务提供，签名和验证的过程都比较直接。</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Signature signature = Signature.getInstance(<span class="string">"SHA1withDSA"</span>)<span class="comment">;</span></div><div class="line">KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance(<span class="string">"DSA"</span>)<span class="comment">;</span></div><div class="line">KeyPair keyPair = keyGenerator.generateKeyPair()<span class="comment">;</span></div><div class="line">PrivateKey privateKey = keyPair.getPrivate()<span class="comment">;</span></div><div class="line">signature.initSign(privateKey)<span class="comment">;</span></div><div class="line"><span class="keyword">byte[] </span>data = <span class="string">"Hello World"</span>.getBytes()<span class="comment">;</span></div><div class="line">signature.update(data)<span class="comment">;</span></div><div class="line"><span class="keyword">byte[] </span>signatureData = signature.sign()<span class="comment">; //得到签名</span></div><div class="line">PublicKey publicKey = keyPair.getPublic()<span class="comment">;</span></div><div class="line">signature.initVerify(publicKey)<span class="comment">;</span></div><div class="line">signature.update(data)<span class="comment">;</span></div><div class="line"><span class="keyword">boolean </span>result = signature.verify(signatureData)<span class="comment">; //进行验证</span></div></pre></td></tr></table></figure>
+<p>验证数字签名使用的公钥可以通过文件或证书的方式来进行发布。</p>
+<h1 id="安全套接字连接"><a href="#安全套接字连接" class="headerlink" title="安全套接字连接"></a><strong>安全套接字连接</strong></h1><hr>
+<p>在各种数据传输方式中，网络传输目前使用较广，但是安全隐患也更多。安全套接字连接指的是对套接字连接进行加密。加密的时候可以选择对称加密算法。但是如何在发送者和接收者之间安全的共享密钥，是个很麻烦的问题。如果再用加密算法来加密密钥，则成为了一个循环问题。非对称加密算法则适合于这种情况。私钥自己保管，公钥则公开出去。发送数据的时候，用私钥加密，接收者用公开的公钥解密；接收数据的时候，则正好相反。这种做法解决了共享密钥的问题，但是另外的一个问题是如何确保接收者所得到的公钥确实来自所声明的发送者，而不是伪造的。为此，又引入了证书的概念。证书中包含了身份标识和对应的公钥。证书由用户所信任的机构签发，并用该机构的私钥来加密。在有些情况下，某个证书签发机构的真实性会需要由另外一个机构的证书来证明。通过这种证明关系，会形成一个证书的链条。而链条的根则是公认的值得信任的机构。只有当证书链条上的所有证书都被信任的时候，才能信任证书中所给出的公钥。</p>
+<p>日常开发中比较常接触的就是<a href="http://en.wikipedia.org/wiki/HTTP_Secure" target="_blank" rel="external">HTTPS</a>，即安全的HTTP连接。大部分用Java程序访问采用HTTPS网站时出现的错误都与证书链条相关。有些网站采用的不是由正规安全机构签发的证书，或是证书已经过期。如果必须访问这样的HTTPS网站的话，可以提供自己的套接字工厂和主机名验证类来绕过去。另外一种做法是通过<a href="http://download.oracle.com/javase/6/docs/technotes/tools/solaris/keytool.html" target="_blank" rel="external">keytool</a>工具把证书导入到系统的信任证书库之中。</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">URL url = <span class="keyword">new</span> <span class="type">URL</span>(<span class="string">"https://localhost:8443"</span>);</div><div class="line">SSLContext context = SSLContext.getInstance(<span class="string">"TLS"</span>);</div><div class="line">context.init(<span class="keyword">new</span> <span class="type">KeyManager</span>[] &#123;&#125;, <span class="keyword">new</span> <span class="type">TrustManager</span>[] &#123;</div><div class="line"><span class="keyword">new</span> <span class="type">MyTrustManager</span>()&#125;, <span class="keyword">new</span> <span class="type">SecureRandom</span>());</div><div class="line">HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();</div><div class="line">connection.setSSLSocketFactory(context.getSocketFactory());</div><div class="line">connection.setHostnameVerifier(<span class="keyword">new</span> <span class="type">MyHostnameVerifier</span>());</div></pre></td></tr></table></figure>
+<p>这里的MyTrustManager实现了<a href="http://download.oracle.com/javase/6/docs/api/javax/net/ssl/X509TrustManager.html" target="_blank" rel="external">X509TrustManager</a>接口，但是所有方法都是默认实现。而MyHostnameVerifier实现了<a href="http://download.oracle.com/javase/6/docs/api/javax/net/ssl/HostnameVerifier.html" target="_blank" rel="external">HostnameVerifier</a>接口，其中的verify方法总是返回true。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><strong>参考资料</strong></h1><hr>
+<ul>
+<li><a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/spec/security-spec.doc.html" target="_blank" rel="external">Java安全体系结构</a></li>
+<li><a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/crypto/CryptoSpec.html" target="_blank" rel="external">Java密码框架（JCA）参考指南</a></li>
+<li><a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jaas/JAASRefGuide.html" target="_blank" rel="external">Java认证和授权服务（JAAS）参考指南</a></li>
+<li><a href="http://download.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html" target="_blank" rel="external">Java安全套接字扩展（JSSE）参考指南</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:29.000Z" itemprop="dateUpdated">2017-07-30 15:00:29</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/08/01/Java笔记-安全/" target="_blank" rel="external">http://bestsonic.github.io/2015/08/01/Java笔记-安全/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&title=《Java笔记-安全》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&title=《Java笔记-安全》 — 星之夢&source=安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/01/Java笔记-安全/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-安全》 — 星之夢&url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/08/02/图解数字签名/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">图解数字签名</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/07/29/Java笔记-IO流/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java笔记-IO流</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&title=《Java笔记-安全》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&title=《Java笔记-安全》 — 星之夢&source=安全性是Java应用程序的非功能性需求的重要组成部分，如同其它的非功能性需求一样，安全性很容易被开发人员所忽略。当然，对于Java EE的开发人员来说，安..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/01/Java笔记-安全/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-安全》 — 星之夢&url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/01/Java笔记-安全/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/08/01/Java笔记-安全/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

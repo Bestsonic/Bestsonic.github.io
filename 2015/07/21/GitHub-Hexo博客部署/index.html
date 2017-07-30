@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>GitHub-Hexo博客部署 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Git,Hexo">
+    <meta name="description" content="今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又动起了折腾的想法。 尝试后感觉Hexo确实很不错，与Octopress很相似，但生成静态页面的速度比Octopress要快的多，而且搭建环境也要容易的多。之前的文章也是把文件直接复制过来就OK了，很赞。 这里简单介绍一下Hexo的安装和使用方法，">
+<meta name="keywords" content="Git,Hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub-Hexo博客部署">
+<meta property="og:url" content="http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又动起了折腾的想法。 尝试后感觉Hexo确实很不错，与Octopress很相似，但生成静态页面的速度比Octopress要快的多，而且搭建环境也要容易的多。之前的文章也是把文件直接复制过来就OK了，很赞。 这里简单介绍一下Hexo的安装和使用方法，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://bestsonic.github.io/img/GitHub_Repository.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/GitHub_AddRespository.jpg">
+<meta property="og:updated_time" content="2017-07-30T07:00:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitHub-Hexo博客部署">
+<meta name="twitter:description" content="今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又动起了折腾的想法。 尝试后感觉Hexo确实很不错，与Octopress很相似，但生成静态页面的速度比Octopress要快的多，而且搭建环境也要容易的多。之前的文章也是把文件直接复制过来就OK了，很赞。 这里简单介绍一下Hexo的安装和使用方法，">
+<meta name="twitter:image" content="http://bestsonic.github.io/img/GitHub_Repository.jpg">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">GitHub-Hexo博客部署</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">GitHub-Hexo博客部署</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-07-21T13:30:00.000Z" itemprop="datePublished" class="page-time">
+  2015-07-21
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#快速体验Hexo"><span class="post-toc-number">1.</span> <span class="post-toc-text">快速体验Hexo</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#了解Hexo"><span class="post-toc-number">2.</span> <span class="post-toc-text">了解Hexo</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#目录结构"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">目录结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装插件和主题"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">安装插件和主题</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#部署到GitHub上"><span class="post-toc-number">3.</span> <span class="post-toc-text">部署到GitHub上</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注册Repository"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">注册Repository</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hexo部署"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Hexo部署</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GitHub部署SSH"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">GitHub部署SSH</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#常用Hexo命令"><span class="post-toc-number">4.</span> <span class="post-toc-text">常用Hexo命令</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#使用MarkDown语法写博客"><span class="post-toc-number">5.</span> <span class="post-toc-text">使用MarkDown语法写博客</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#注意事项"><span class="post-toc-number">6.</span> <span class="post-toc-text">注意事项</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关于摘要"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">关于摘要</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#图片显示"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">图片显示</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自定义页面"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">自定义页面</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实时预览"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">实时预览</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用MarkDown编辑器"><span class="post-toc-number">6.5.</span> <span class="post-toc-text">使用MarkDown编辑器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其他Tip"><span class="post-toc-number">6.6.</span> <span class="post-toc-text">其他Tip</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-GitHub-Hexo博客部署"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">GitHub-Hexo博客部署</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-07-21 21:30:00" datetime="2015-07-21T13:30:00.000Z"  itemprop="datePublished">2015-07-21</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又动起了折腾的想法。</p>
+<p>尝试后感觉Hexo确实很不错，与Octopress很相似，但生成静态页面的速度比Octopress要快的多，而且搭建环境也要容易的多。之前的文章也是把文件直接复制过来就OK了，很赞。</p>
+<p>这里简单介绍一下Hexo的安装和使用方法，详细的文档包括API都可以在官网找到(看域名是台湾人的作品)。</p>
+<a id="more"></a>
+<h1 id="快速体验Hexo"><a href="#快速体验Hexo" class="headerlink" title="快速体验Hexo"></a>快速体验Hexo</h1><hr>
+<p>首先安装Git。</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">https:</span><span class="comment">//git-scm.com/</span></div></pre></td></tr></table></figure>
+<p>Hexo的安装十分便捷，我们先尝试快速的使用Hexo搭建一个站点。</p>
+<p>首先安装Node.js，这里使用nvm作为node版本控制的文件。最好不要直接apt-get，版本不对可能会有问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh</div><div class="line">nvm install 0.10</div></pre></td></tr></table></figure>
+<p>接下来使用npm工具安装hexo。(在任意位置点击鼠标右键，选择Git bash)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g hexo</div></pre></td></tr></table></figure>
+<p>初始化hexo文件夹。</p>
+<p>安装完成后，在你喜爱的文件夹下（如D:\hexo），执行以下指令(在D:\hexo内点击鼠标右键，选择Git bash)，Hexo 即会自动在目标文件夹建立网站所需要的所有文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt; &amp;&amp; <span class="built_in">cd</span> &lt;folder&gt;</div></pre></td></tr></table></figure>
+<p>M安装依赖包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install</div></pre></td></tr></table></figure>
+<p>生成静态页面并预览。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo g &amp;&amp; hexo s</div></pre></td></tr></table></figure>
+<p>OK，在浏览器中输入<em>localhost:4000</em>，一个Hexo站点就已经展示在你面前了！是不是特别容易？相比Octopress，搭建环境不是方便了一点点。</p>
+<h1 id="了解Hexo"><a href="#了解Hexo" class="headerlink" title="了解Hexo"></a>了解Hexo</h1><hr>
+<p>当然，以上只是使用Hexo搭建了一个站点，要想使用它，还需要多了解一些东西。</p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><p>Hexo的目录结构如下，其中<em>_config.yml</em>是整个站点的配置文件，<em>source/_drafts</em>是草稿文件目录，<em>source/_posts</em>是发表的博文目录，<em>themes</em>是下载的主题目录，其它的目录暂时不用管。</p>
+<figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">  ├── <span class="variable">_config</span>.yml</div><div class="line">  ├── package.json</div><div class="line">  ├── scaffolds</div><div class="line">  ├── scripts</div><div class="line">  ├── source</div><div class="line">  |   ├── <span class="variable">_drafts</span></div><div class="line">  |   └── <span class="variable">_posts</span></div><div class="line">  └── themes</div></pre></td></tr></table></figure>
+<p>首先是修改配置文件，主要就是配置一下自己的站点信息，配置文件中的注释比较详细，如果不懂的话可以=&gt;点这里&lt;=看一下,在预览状态下改的话网页上能即时看到效果。</p>
+<h2 id="安装插件和主题"><a href="#安装插件和主题" class="headerlink" title="安装插件和主题"></a>安装插件和主题</h2><hr>
+<p>Hexo提供丰富的插件以及主题，安装方法都是一样的。更多的主题可以在<a href="https://github.com/hexojs/hexo/wiki/themes" target="_blank" rel="external">这里</a>下载。</p>
+<ul>
+<li>插件:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ npm install &lt;plugin-name&gt; --save</div></pre></td></tr></table></figure>
+<ul>
+<li>主题:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> &lt;repository&gt; themes/&lt;theme-name&gt;</div></pre></td></tr></table></figure>
+<p>无论是插件还是主题在安装后都需要在根目录下_config.yml中修改plugins和theme的值以启用他们。</p>
+<h1 id="部署到GitHub上"><a href="#部署到GitHub上" class="headerlink" title="部署到GitHub上"></a>部署到GitHub上</h1><hr>
+<h2 id="注册Repository"><a href="#注册Repository" class="headerlink" title="注册Repository"></a>注册Repository</h2><p>首先注册GitHub账号。已有账号可以跳过，没有的，请在此进行注册，很简单，这里就不介绍了。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/GitHub_Repository.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在自己GitHub主页右上角点击那个+号，创建一个新的repository。比如我的GitHub账号是Bestsonic，那么我应该创建的repository名字应该是<em>Bestsonic.github.io</em>。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/GitHub_AddRespository.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>切记GitHub的用户名是什么博客的名称就是什么。如果你博客名称跟Github的名称不一致是不允许通过的，除非你创建了其他用户的时候把branch:master分支换成gh-pages是GitHub为了web项目特别设置的分支。</p>
+<h2 id="Hexo部署"><a href="#Hexo部署" class="headerlink" title="Hexo部署"></a>Hexo部署</h2><p>接着，可以将hexo部署到GitHub上。</p>
+<p>编辑<em>_config.yml</em>(在<em>D:\hexo</em>下)。你在部署时，要把下面的<em>Bestsonic</em>都换成你的账号名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line"><span class="built_in">type</span>: git</div><div class="line">repository: git@github.com:Bestsonic/Bestsonic.github.com.git</div><div class="line">branch: master</div></pre></td></tr></table></figure>
+<p>注意：<br>Hexo更新到3.0后，deploy的type由github变成了git。</p>
+<p>在配置<em>type: git</em>后，在运行hexo d部署时，可能会出现error deployer not found:git。这时需要在Git bash中输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install hexo-deployer-git --save</div></pre></td></tr></table></figure>
+<p>如果你是为一个项目制作网站，那么需要把branch设置为gh-pages。若要绑定自定义域名也可以参考<a href="http://zespia.tw/hexo/docs/deployment.html" target="_blank" rel="external">Hexo</a>或<a href="http://pages.github.com/" target="_blank" rel="external">Github Page</a>的帮助文档，制作一个<em>cname</em>文件。</p>
+<p>之后执行下列指令即可完成部署，注意部署会覆盖掉你之前在版本库中存放的文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">hexo clean</div><div class="line">hexo generate</div><div class="line">hexo deploy</div></pre></td></tr></table></figure>
+<p>或可加入 —generate 选项，在部署前自动生成文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hexo deploy --generate</div></pre></td></tr></table></figure>
+<p>其原理就是hexo在执行hexo generate时会在本地先把博客生成的一套静态站点放到public文件夹中，在执行hexo deploy时将其复制到.deploy文件夹中。Github的版本库通常建议同时附上README.md说明文件，但是hexo默认情况下会把所有md文件解析成html文件，所以即使你在线生成了README.md，它也会在你下一次部署时被删去。怎么解决呢？</p>
+<p>在执行hexo deploy前把在本地写好的README.md文件复制到.deploy文件夹中，再去执行hexo deploy。</p>
+<h2 id="GitHub部署SSH"><a href="#GitHub部署SSH" class="headerlink" title="GitHub部署SSH"></a>GitHub部署SSH</h2><p>有些新用户需要设置 ssh，否则上述命令会失败。具体过程如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ <span class="built_in">cd</span> ~/.ssh</div><div class="line"><span class="comment"># Checks to see if there is a directory named ".ssh" in your user directory</span></div></pre></td></tr></table></figure>
+<p>使用ssh-keygen命令产生新的key</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -t rsa -C <span class="string">"your_email@example.com"</span></div><div class="line"><span class="comment"># Creates a new ssh key using the provided email</span></div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/home/you/.ssh/id_rsa):</div></pre></td></tr></table></figure>
+<p>使用默认的文件名，直接enter，按提示输入密码（如果不提供密码，SSH将无密码连接，如果private key泄露可能会有安全问题）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): [Type a passphrase]</div><div class="line">Enter same passphrase again: [Type passphrase again]</div></pre></td></tr></table></figure>
+<p>密匙产生成功:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Your identification has been saved <span class="keyword">in</span> /home/you/.ssh/id_rsa.</div><div class="line">Your public key has been saved <span class="keyword">in</span> /home/you/.ssh/id_rsa.pub.</div><div class="line">The key fingerprint is:</div><div class="line">01:0f:f4:3b:ca:85:d6:17:a1:7d:f0:68:9d:f0:a2:db your_email@example.com</div></pre></td></tr></table></figure></p>
+<p>接下来，只要上传public key到GitHub账户即可。</p>
+<p>使用以下命令测试是否能连接github服务器，如果显示以下语句，则表明配置成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh -T git@github.com</div><div class="line">Hi Bestsonic! You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></div></pre></td></tr></table></figure>
+<p>这个过程可能会碰到提示没有配置username和email，按提示配置即可。</p>
+<p>记住：每次修改本地文件后，需要hexo generate才能保存。每次使用命令时，都要在D:\hexo目录下。</p>
+<p>Ok,我们的博客已经完全搭建起来了，在浏览器访问Bestsonic.github.io就能看到你的成就了！</p>
+<h1 id="常用Hexo命令"><a href="#常用Hexo命令" class="headerlink" title="常用Hexo命令"></a>常用Hexo命令</h1><hr>
+<p>Hexo的常用命令有以下几个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ hexo new [layout] &lt;title&gt;     <span class="comment">#建立新文章，默认在_posts下，layout="draft"时发布的是草稿</span></div><div class="line">$ hexo publish &lt;filename&gt;       <span class="comment">#将_drafts下的文件放到_posts下，也就是发布草稿</span></div><div class="line">$ hexo generate                 <span class="comment">#生成静态网页</span></div><div class="line">$ hexo server                   <span class="comment">#启动预览服务器，开启-d选项时可以预览草稿</span></div><div class="line">$ hexo deploy                   <span class="comment">#发布到远程服务器，开启--generate选项可以在deploy前自动generate</span></div></pre></td></tr></table></figure>
+<p>熟悉Octopress的话应该有时曾相识的感觉，Hexo和Octopress的操作基本是一样的，但是它的generate确实快上很多。。</p>
+<p>此外，Hexo还提供了以上几个命令的简化版本，可以减少输入。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ hexo n  <span class="comment"># == hexo new</span></div><div class="line">$ hexo p  <span class="comment"># == hexo publish</span></div><div class="line">$ hexo g  <span class="comment"># == hexo generate</span></div><div class="line">$ hexo s  <span class="comment"># == hexo server</span></div><div class="line">$ hexo d  <span class="comment"># == hexo deploy</span></div></pre></td></tr></table></figure>
+<h1 id="使用MarkDown语法写博客"><a href="#使用MarkDown语法写博客" class="headerlink" title="使用MarkDown语法写博客"></a>使用MarkDown语法写博客</h1><hr>
+<p>和Octopress完全一样，使用Markdown语法编辑文章。</p>
+<p>使用hexo new命令生成文章或者直接在_posts目录下直接创建文件，打开后先编辑文章头部信息，如下所示是本文的头部信息，以—结尾。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">title:</span> <span class="string">使用Hexo搭建个人博客</span></div><div class="line"><span class="attr">layout:</span> <span class="string">post</span></div><div class="line"><span class="attr">date:</span> <span class="number">2014</span><span class="bullet">-03</span><span class="bullet">-03</span> <span class="number">19</span><span class="string">:07:43</span></div><div class="line"><span class="attr">comments:</span> <span class="literal">true</span></div><div class="line"><span class="attr">categories:</span> <span class="string">Blog</span></div><div class="line"><span class="attr">tags:</span> <span class="string">[Hexo]</span></div><div class="line"><span class="attr">keywords:</span> <span class="string">Hexo,</span> <span class="string">Blog</span></div><div class="line"><span class="attr">description:</span> <span class="string">生命在于折腾，又把博客折腾到Hexo了。给Hexo点赞。</span></div><div class="line"><span class="meta">---</span></div></pre></td></tr></table></figure>
+<p>接下来使用Markdown编辑文章就可以了。</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><hr>
+<h2 id="关于摘要"><a href="#关于摘要" class="headerlink" title="关于摘要"></a>关于摘要</h2><p>如果你之前使用过jekyll那么可能这一切都很熟悉。hexo的文章保存在source/_post目录下。在文档中插入<!--more-->就可以将文章分隔，more以上的部分会已摘要的形式显示，当查看全文时more以下的部分才会显示出来。也可以在Markdown文件中定义description。</p>
+<h2 id="图片显示"><a href="#图片显示" class="headerlink" title="图片显示"></a>图片显示</h2><p>同样放到source目中下。建议大家建立一个image文件夹，把文章中使用到的图片丢到这里来（当然可以按照你的习惯进行分类），之后在Markdown文件中按照这样的语法进行插入图片的操作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">![图片描述文字](/image/图片名.jpg)</div></pre></td></tr></table></figure>
+<h2 id="自定义页面"><a href="#自定义页面" class="headerlink" title="自定义页面"></a>自定义页面</h2><p>如果想建立一个简单的Page很容易，只需要在source下建立一个文件夹，如page。在这个目录下新建index.md：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">---</span></div><div class="line"><span class="attr">title:</span> <span class="string">Page</span></div><div class="line"><span class="attr">date:</span> <span class="number">2013</span><span class="bullet">-12</span><span class="bullet">-26</span> <span class="number">22</span><span class="string">:52:56</span></div><div class="line"><span class="meta">---</span></div><div class="line"><span class="string">This</span> <span class="string">is</span> <span class="string">a</span> <span class="string">page</span> <span class="string">test.</span></div></pre></td></tr></table></figure></p>
+<p>最后在你的主题目录下找到主题的配置文件_config.yml，在里面配置页面的路径即可。</p>
+<p>so easy?那么如果我放一些不需要hexo帮我解析的HTML文件(比如404页面)呢？</p>
+<p>在source下放入一个HTML文件，hexo还是会自作多情的用render帮你解析了。这个时候需要在html文件的头部加入:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">layout:</span> <span class="literal">false</span></div><div class="line"><span class="meta">---</span></div></pre></td></tr></table></figure>
+<p>好吧，我的静态页面比较多，不想在每个html页面头部加入layout定义。那你可以修改主题的layout.ejs文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;% <span class="keyword">if</span>(page.layout==<span class="string">'page'</span>)&#123; %&gt;</div><div class="line">  &lt;% <span class="keyword">if</span>(page.source.match(<span class="regexp">/\.md$/</span>))&#123; %&gt;</div><div class="line">     原来的内容</div><div class="line">  &lt;% &#125;<span class="keyword">else</span>&#123; %&gt;</div><div class="line">    &lt;%- page.content %&gt;</div><div class="line">   &lt;% &#125; %&gt;</div><div class="line">&lt;% &#125;<span class="keyword">else</span>&#123; %&gt;</div><div class="line">原来的内容</div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure>
+<p>这样你放入source文件夹中的html页面就会被hexo忽略掉。</p>
+<h2 id="实时预览"><a href="#实时预览" class="headerlink" title="实时预览"></a>实时预览</h2><p>如今的Hexo已经可以自动监控文件修改，并为你自动更新。如果连刷新都懒得去按怎么办？</p>
+<p>使用livereload。</p>
+<hr>
+<ul>
+<li>livereload不仅仅跨平台，而且是开源的，可以使用npm安装，同时提供包括自动编译Less、Stylus或集成Sublime Text等编辑器的插件。神器在手妈妈再也不用担心我的F5键了。</li>
+</ul>
+<hr>
+<h2 id="使用MarkDown编辑器"><a href="#使用MarkDown编辑器" class="headerlink" title="使用MarkDown编辑器"></a>使用MarkDown编辑器</h2><p>推荐一款好用的MarkDown编辑器：Atom</p>
+<p>下载地址：<a href="https://atom.io/" target="_blank" rel="external">https://atom.io/</a></p>
+<p>Atom软件的使用，可以参考<a href="http://www.letiantian.me/2014-05-10-atom-editor/" target="_blank" rel="external">这里</a>。</p>
+<p>MarkDown语法，请见<a href="https://github.com/cssmagic/blog/issues/13" target="_blank" rel="external">GitHub 风格的 Markdown 语法</a>、<a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">Markdown 语法说明</a>。</p>
+<h2 id="其他Tip"><a href="#其他Tip" class="headerlink" title="其他Tip"></a>其他Tip</h2><ul>
+<li><p>有的时候当你修改页面或更改配置后发现并没有立即生效，可以执行hexo clean然后再启动hexo server。</p>
+</li>
+<li><p>默认的评论组件可能并不太适合中国大陆用户（你懂的。。），你可以选择性的换成别的组件，或主题，比如我用的多说评论以及Pacman主题。</p>
+</li>
+<li><p>参与开源项目很简单，你只需要学会使用Git以及Github，遇到bug或任何程序问题可以递交issue，当然如果你有能力自己解决问题或可以为Hexo开发新的功能，那么请pull request。</p>
+</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:23.000Z" itemprop="dateUpdated">2017-07-30 15:00:23</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/07/21/GitHub-Hexo博客部署/" target="_blank" rel="external">http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&title=《GitHub-Hexo博客部署》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&title=《GitHub-Hexo博客部署》 — 星之夢&source=今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GitHub-Hexo博客部署》 — 星之夢&url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/07/23/软件设计的一些原则/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">软件设计的一些原则(转)</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&title=《GitHub-Hexo博客部署》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&title=《GitHub-Hexo博客部署》 — 星之夢&source=今天无意中看到了Hexo这个基于Node.js博客框架，自称轻巧快速，并与Jekyll/Octopress有着很好的兼容性，基本能够做到无痛移植，于是就又..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《GitHub-Hexo博客部署》 — 星之夢&url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/07/21/GitHub-Hexo博客部署/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>图解数字签名 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,安全">
+    <meta name="description" content="本文转载字阮一峰的日志。 今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digital certificate）到底是什么。 我对这些问题的理解，一直是模模糊糊的，很多细节搞不清楚。读完这篇文章后，发现思路一下子就理清了。为了加深记忆，我把文字和图片都翻译出来了。">
+<meta name="keywords" content="Java,安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图解数字签名">
+<meta property="og:url" content="http://bestsonic.github.io/2015/08/02/图解数字签名/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="本文转载字阮一峰的日志。 今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digital certificate）到底是什么。 我对这些问题的理解，一直是模模糊糊的，很多细节搞不清楚。读完这篇文章后，发现思路一下子就理清了。为了加深记忆，我把文字和图片都翻译出来了。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign1.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign2.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign3.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign4.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign5.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign6.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign7.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign8.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign9.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign10.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign11.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign12.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign13.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign14.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign15.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign16.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign17.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign18.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/sign19.png">
+<meta property="og:updated_time" content="2017-07-30T07:00:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图解数字签名">
+<meta name="twitter:description" content="本文转载字阮一峰的日志。 今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digital certificate）到底是什么。 我对这些问题的理解，一直是模模糊糊的，很多细节搞不清楚。读完这篇文章后，发现思路一下子就理清了。为了加深记忆，我把文字和图片都翻译出来了。">
+<meta name="twitter:image" content="http://bestsonic.github.io/img/sign1.png">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">图解数字签名</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">图解数字签名</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-08-02T02:45:00.000Z" itemprop="datePublished" class="page-time">
+  2015-08-02
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-图解数字签名"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">图解数字签名</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-08-02 10:45:00" datetime="2015-08-02T02:45:00.000Z"  itemprop="datePublished">2015-08-02</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文转载字阮一峰的日志。</p>
+<p>今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digital certificate）到底是什么。</p>
+<p>我对这些问题的理解，一直是模模糊糊的，很多细节搞不清楚。读完这篇文章后，发现思路一下子就理清了。为了加深记忆，我把文字和图片都翻译出来了。</p>
+<a id="more"></a>
+<ol>
+<li><p>Bob有两把钥匙，一把是公钥，一把是私钥。</p>
+<p><img src="/img/sign1.png" alt=""></p>
+<p>Bob的公钥对于需要它的任何人都能得到，但是他的私钥则自己保留。密钥（公钥和私钥）是用来加密信息的。加密信息的过程意味着“混淆打乱”，以至于只有拥有合适密钥的人才能将其再次变得可读。Bob的两把钥匙中，任何一把用来加密数据，另一把就能解密数据。</p>
+</li>
+<li><p>Bob将他的公钥送给了他的朋友Pat, Doug, Susan。每人一把公钥。</p>
+<p><img src="/img/sign2.png" alt=""></p>
+</li>
+<li><p>Susan要给Bob写一封保密的信。她写完后用Bob的公钥加密，就可以达到保密的效果。Bob的任一同事可能都可以拿到Susan已经加密的信息，但是没有Bob的私钥，这些数据都是没用的。</p>
+<p><img src="/img/sign3.png" alt=""></p>
+</li>
+<li><p>Bob收信后，用私钥解密，就看到了信件内容。这里要强调的是，只要Bob的私钥不泄露，这封信就是安全的，即使落在别人手里，也无法解密。</p>
+<p><img src="/img/sign4.png" alt=""></p>
+</li>
+<li><p>利用他的私钥和适当的软件，Bob放置了数字签名在文档和一些数据中。这个数字签名是Bob放在数据中的，是对于Bob而言唯一的“标识”，是非常难以捏造的。并且，这个签名能够确保当数据发生任何变动时都会被发现。</p>
+<p>对文档签名时，Bob的软件会将数据揉碎压缩成仅仅几行，这个过程被称为“HASH校验”，形成的几行则被称作信息的摘要。（直接将信息摘要还原成原始的数据信息是不可能的）</p>
+<p><img src="/img/sign5.png" alt=""></p>
+</li>
+<li><p>然后Bob的软件再利用他的私钥加密信息的摘要，这个结果就是数字签名。</p>
+<p><img src="/img/sign6.png" alt=""></p>
+</li>
+<li><p>最后，Bob将这个数字签名与信息文档放在一块。所有的数据已经被有所标识了。</p>
+<p><img src="/img/sign7.png" alt=""></p>
+</li>
+<li><p>现在Bob把文档传递给了Pat。首先Pat利用Bob的公钥将签名解密还原为信息的摘要。如果这可行，说明文档确实是Bob加密的，因为只有他自己才有自己的密钥。</p>
+<p><img src="/img/sign8.png" alt=""></p>
+<p>Pat的软件同样将信息数据加密为摘要，如果这个摘要跟刚才解密出来的摘要相同，那么Pat就可以断定签名过的数据没有被修改过。</p>
+<p><img src="/img/sign9.png" alt=""></p>
+</li>
+<li><p>这时出现了Doug，他企图欺骗Pat。Doug偷偷使用了Bob的电脑，换掉了Bob的公钥和私钥，并用假的私钥生成了数字签名，发给了Pat。**这时怎样判断来自Bob的公钥是否可靠呢？</p>
+<p>碰巧的是，Susan工作在公司的CA中心（证书认证），Susan可以对Bob的公钥和他的一些资料信息一并签名，简单地为Bob制作一个数字证书。证书中心用自己的私钥，对鲍勃的公钥和一些相关信息一起加密，生成”数字证书”（Digital Certificate）。</p>
+<p><img src="/img/sign10.png" alt=""></p>
+<p>鲍勃拿到数字证书以后，就可以放心了。以后再给苏珊写信，只要在签名的同时，再附上数字证书就行了。</p>
+<p><img src="/img/sign11.png" alt=""></p>
+</li>
+<li><p>现在Bob的同事能够通过检测Bob受信任的证书来确保他们拥有的公钥确实是Bob的。事实上，Bob公司中没有人会接受没有Susan生成证书的那个签名。这个就给了Susan撤销私钥被泄露的数字证书的权利，而这几乎是不太可能的。Susan的CA证书验证则被广泛的接受。<br>我们接着说Bob把已经签名的文档发给了Pat。为了验证在文档上的数字签名，Pat首先借助软件用Susan（即CA）的公钥来检测Bob文档上的证书。如果顺利解开了证书则证明是Susan生成的它。解开证书之后，Pat可以通过联系CA中心，与Bob证书上的信息对照，以检查文档是否被修改过。<br>然后，pat从证书中拿到Bob的公钥，用它来检测Bob的签名。如果Bob的公钥能够顺利解开签名，Pat就可以确定这个签名是利用Bob的私钥生成的，同时也匹配了Susan颁发的证书公钥。并且，如果签名是对照的，也说明了Doug不可能修改了文档内容。</p>
+<p><img src="/img/sign12.png" alt=""></p>
+</li>
+<li><p>下面，我们看一个应用”数字证书”的实例：https协议。这个协议主要用于网页加密。</p>
+<p><img src="/img/sign13.jpg" alt=""></p>
+<p>首先，客户端向服务器发出加密请求。</p>
+<p><img src="/img/sign14.png" alt=""></p>
+<p>服务器用自己的私钥加密网页以后，连同本身的数字证书，一起发送给客户端。</p>
+<p><img src="/img/sign15.png" alt=""></p>
+<p>客户端（浏览器）的”证书管理器”，有”受信任的根证书颁发机构”列表。客户端会根据这张列表，查看解开数字证书的公钥是否在列表之内。</p>
+<p><img src="/img/sign16.png" alt=""></p>
+<p>如果数字证书记载的网址，与你正在浏览的网址不一致，就说明这张证书可能被冒用，浏览器会发出警告。</p>
+<p><img src="/img/sign17.png" alt=""></p>
+<p>如果这张数字证书不是由受信任的机构颁发的，浏览器会发出另一种警告。</p>
+<p><img src="/img/sign18.jpg" alt=""></p>
+<p>如果数字证书是可靠的，客户端就可以使用证书中的服务器公钥，对信息进行加密，然后与服务器交换加密信息。</p>
+<p><img src="/img/sign19.png" alt=""></p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:18.000Z" itemprop="dateUpdated">2017-07-30 15:00:18</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/08/02/图解数字签名/" target="_blank" rel="external">http://bestsonic.github.io/2015/08/02/图解数字签名/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/安全/">安全</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/02/图解数字签名/&title=《图解数字签名》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/02/图解数字签名/&title=《图解数字签名》 — 星之夢&source=本文转载字阮一峰的日志。
+今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digita..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/02/图解数字签名/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《图解数字签名》 — 星之夢&url=http://bestsonic.github.io/2015/08/02/图解数字签名/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/02/图解数字签名/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/08/11/SpringMVC-入门/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java笔记-JDBC</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/08/01/Java笔记-安全/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java笔记-安全</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/02/图解数字签名/&title=《图解数字签名》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/02/图解数字签名/&title=《图解数字签名》 — 星之夢&source=本文转载字阮一峰的日志。
+今天，我读到一篇好文章。它用图片通俗易懂地解释了，”数字签名”（digital signature）和”数字证书”（digita..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/02/图解数字签名/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《图解数字签名》 — 星之夢&url=http://bestsonic.github.io/2015/08/02/图解数字签名/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/02/图解数字签名/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/08/02/图解数字签名/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>Java数据库开发专题 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JDBC,数据库开发">
+    <meta name="description" content="Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通过学习本专题所提供的技术文章和教程，您将了解到使用 Java 技术进行数据管理和持久化开发诸多模式和技巧，以及如何利用 ORM 工具或对象数据库来简化数据库开发。">
+<meta name="keywords" content="JDBC,数据库开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java数据库开发专题">
+<meta property="og:url" content="http://bestsonic.github.io/2015/07/25/Java数据库开发专题/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通过学习本专题所提供的技术文章和教程，您将了解到使用 Java 技术进行数据管理和持久化开发诸多模式和技巧，以及如何利用 ORM 工具或对象数据库来简化数据库开发。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-07-30T07:00:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java数据库开发专题">
+<meta name="twitter:description" content="Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通过学习本专题所提供的技术文章和教程，您将了解到使用 Java 技术进行数据管理和持久化开发诸多模式和技巧，以及如何利用 ORM 工具或对象数据库来简化数据库开发。">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java数据库开发专题</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java数据库开发专题</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-07-25T02:30:00.000Z" itemprop="datePublished" class="page-time">
+  2015-07-25
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java-数据管理和持久性综述"><span class="post-toc-number">1.</span> <span class="post-toc-text">Java 数据管理和持久性综述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#持久化模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">持久化模式</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JDBC（Java-DataBase-Connectivity）"><span class="post-toc-number">3.</span> <span class="post-toc-text">JDBC（Java DataBase Connectivity）</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#性能优化"><span class="post-toc-number">4.</span> <span class="post-toc-text">性能优化</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java-ORM-框架"><span class="post-toc-number">5.</span> <span class="post-toc-text">Java ORM 框架</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hibernate"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">Hibernate</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#iBatis"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">iBatis</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JDO"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">JDO</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Simple-Persistence-for-Java"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">Simple Persistence for Java</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Java数据库开发专题"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java数据库开发专题</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-07-25 10:30:00" datetime="2015-07-25T02:30:00.000Z"  itemprop="datePublished">2015-07-25</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通过学习本专题所提供的技术文章和教程，您将了解到使用 Java 技术进行数据管理和持久化开发诸多模式和技巧，以及如何利用 ORM 工具或对象数据库来简化数据库开发。</p>
+<a id="more"></a>
+<h1 id="Java-数据管理和持久性综述"><a href="#Java-数据管理和持久性综述" class="headerlink" title="Java 数据管理和持久性综述"></a><strong>Java 数据管理和持久性综述</strong></h1><hr>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-datman/" target="_blank" rel="external">J2EE 应用程序中的数据管理和数据持久性</a></strong></p>
+<p>本文分析了在 Java 平台上可用的两个数据管理策略：Java 对象序列化和 Java 数据库连接（JDBC）。<br><strong><a href="http://www.ibm.com/developerworks/cn/opensource/os-lightweight6/" target="_blank" rel="external">轻量级开发的成功秘诀：持久性策略</a></strong></p>
+<p>在任何 Java 技术应用程序中，持久性框架都是一个极其重要的部分。作出选择是令人头疼的一件事。因此，开发人员常常选择流行的框架，不论是企业级 JavaBeans 还是 Hibernate。本文讨论各种方案并给您一个选择最佳方案的方法。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/dm-0405roy/" target="_blank" rel="external">J2EE 与 IBM 对象-关系数据库</a></strong></p>
+<p>本文简要地介绍了 J2EE 环境，并讨论了 J2EE 开发中使用的面向对象方法（分析、设计、实现），以及一些与对象持久性相关的问题。</p>
+<h1 id="持久化模式"><a href="#持久化模式" class="headerlink" title="持久化模式"></a><strong>持久化模式</strong></h1><hr>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-dao/" target="_blank" rel="external">高级 DAO 编程</a></strong></p>
+<p>J2EE 开发人员使用数据访问对象(Data Access Object DAO)设计模式，以便将低级别的数据访问逻辑与高级别的业务逻辑分离。本文讨论了 DAO 编程中三个常常被忽略的方面：事务界定、异常处理和日志记录。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-pop1/" target="_blank" rel="external">持久化模式，第 1 部分: 现代 ORM 工具的策略和最佳实践</a></strong></p>
+<p>尽管有许多开发人员使用对象-关系映射（ORM）工具构造应用程序的持久化层，但是也有一些开发人员对于如何使用这些工具有误解，常常不必要地重复编写代码。本文作者在构造持久化层方面具有丰富的经验，他们对持久化模式和最佳实践有清晰的认识。第 1 部分讨论一致且紧凑的领域模型和持久化层的基本概念。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-pop2/" target="_blank" rel="external">持久化模式，第 2 部分: 提高代码重用和改进性能</a></strong></p>
+<p>在第 2 部分中，作者将描述基领域实体、领域模型中的行为以及泛型 DAO 的高级特性，还要提供改进领域模型的数据获取性能的策略。</p>
+<h1 id="JDBC（Java-DataBase-Connectivity）"><a href="#JDBC（Java-DataBase-Connectivity）" class="headerlink" title="JDBC（Java DataBase Connectivity）"></a><strong>JDBC（Java DataBase Connectivity）</strong></h1><hr>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/jdbc-objects/" target="_blank" rel="external">使用 JDBC 来创建数据库对象</a></strong></p>
+<p>本文分析了 Java DataBase Connectivity (JDBC)，一个在 Java 中以面向对象的方法来联接数据库的技术。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-jdbcwrap/" target="_blank" rel="external">一个简单的 JDBC 包装器</a></strong></p>
+<p>本文描述了一种简单的包装器库，它让使用简单的数据库易如反掌。您会发现您已经开始想在编写的每一个程序中都使用 JDBC。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-jdbcwrap/" target="_blank" rel="external">对一个简单的 JDBC 包装器的扩展及应用</a></strong></p>
+<p>本文将对《一个简单的 JDBC 包装器》中的JDBC包装器进行一些扩展，然后介绍一下其在 JSP/JavaBean 开发模式中的应用。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/norton/0102_norton.html" target="_blank" rel="external">JDBC，详解</a></strong></p>
+<p>Java 的灵活性为您提供了几种与数据库连接和交互的方法。本文将概述其中一种方法：开发针对 DB2 使用 Java 数据库连接（JDBC）API 的 Java 应用程序和 applet。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-loggable/" target="_blank" rel="external">JDBC 查询日志变得简单</a></strong></p>
+<p>JDBC java.sql.PreparedStatement 接口的简单扩展可以使查询日志更少犯错，同时整理您的代码。在本文中，作者向您介绍如何应用基本的封装技术(“通过封装来实现扩展”也称为 Decorator设计模式)来获得最满意的结果。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-pg01115.html" target="_blank" rel="external">实战 Groovy: 用 Groovy 进行 JDBC 编程</a></strong></p>
+<p>GroovySql 结合利用闭包（closure）和迭代器（iterator），把资源管理的负担转移到 Groovy 框架本身，从而简化了 Java 数据库连通性（Java Database Connectivity，JDBC）的编程。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-lo-jse65/index.html" target="_blank" rel="external">Java SE 6 新特性: Java DB 和 JDBC 4.0</a></strong></p>
+<p>本系列文章主要介绍 Java SE 6 在 API 库方面的部分新特性，通过一些例子和讲解，帮助开发者在编程实践当中更好的运用 Java SE 6，提高开发效率。本文介绍了 Java SE 6 在数据库编程方面的新特性。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-zhanghz2/" target="_blank" rel="external">使用 Java 5 RowSet 新特性访问 IBM DB2 数据库</a></strong></p>
+<p>Java 5 在 Java Database Connectivity (JDBC) 方面加强了支持，其中加入了新的包 javax.sql.rowset，javax.sql.rowset.serial，javax.sql.rowset.spi。本文将通过实例来演示这些新的特性。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-lo-java6rowset/" target="_blank" rel="external">Java 6 RowSet 使用完全剖析</a></strong></p>
+<p>javax.sql.rowset 包下定义了五个不同的 RowSet 接口，供不同的场合使用。本文将分别对这五个 RowSet 的使用场合以及详尽用法进行介绍。</p>
+<h1 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a><strong>性能优化</strong></h1><hr>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-dbperform/" target="_blank" rel="external">Java 访问数据库的速度瓶颈问题的分析及解决</a></strong></p>
+<p>本文分析了 Java 访问数据库的瓶颈问题，并给出了相应的解决办法。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-dbperform/part2/" target="_blank" rel="external">高速缓存和连接池对访问数据库性能的影响</a></strong></p>
+<p>本文在介绍高速缓存和连接池的基础上，给出解决数据库性能问题的一些有用办法。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-jdbcperform/" target="_blank" rel="external">基于 JDBC 的数据库连接池高效管理策略</a></strong></p>
+<p>本文在对数据库连接进行透彻分析的基础上，提出并实现了一个高效的连接管理策略，使得开发高性能的数据库应用变得相对容易。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-connpoolproxy/" target="_blank" rel="external">使用Java 中的动态代理实现数据库连接池</a></strong></p>
+<p>作者通过使用 JAVA 中的动态代理实现数据库连接池，使使用者可以以普通的 JDBC 连接的使用习惯来使用连接池。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/0211webdev/0211webdev.html" target="_blank" rel="external">Web 开发人员：为最佳性能而进行优化？</a></strong></p>
+<p>如果您在开发 Web 应用程序，那么您很可能熟悉基于Java连接到数据库的方法：JDBC 和 SQLJ。但是您知道如何能让使用这些方法的应用程序获得最佳性能吗？</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-lo-monitor-jdbcconn/" target="_blank" rel="external">监控业务系统数据库连接</a></strong></p>
+<p>本文分析了业务模块如何导致系统级别的问题，并提出了实时监控数据库连接细节并准确定位异常所在模块的方法，以方便排除业务模块问题。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/views/java/tutorials.jsp?cv_doc_id=85232" target="_blank" rel="external">教程：在使用 SQLJ 和 JDBC 时获取最优的 DB2 性能</a></strong></p>
+<p>本教程介绍了 SQLJ 和 JDBC 的知识，并对它们进行了比较。除此之外，本教程还讨论了一些方法，以使您的 Java 程序在访问 DB2 时达到最佳性能。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/dm-0708ma/" target="_blank" rel="external">诊断 DB2 Java 应用程序的性能问题</a></strong></p>
+<p>从应用程序客户机的角度诊断和隔离性能问题。本文学习如何为在 IBM DB2 for Linux, UNIX, and Windows 数据库上运行的 Java 应用程序排除性能问题。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/dm-0512zhanghzh/" target="_blank" rel="external">在 J2EE Web Application 中快速高效访问 IBM DB2 数据库</a></strong></p>
+<p>本文首先介绍如何快速的利用 IBM DB2 提供的 JDBC 驱动程序通过 Java API 进行数据库接口开发，然后进一步介绍如何在 WebSphere Application Server 6.0 中配置数据库连接池 (Connection Pool)，更加高效地访问 IBM DB2 数据库，最后通过一致的代码接口，使得 Web 开发人员更加透明的访问 IBM DB2 数据库。</p>
+<h1 id="Java-ORM-框架"><a href="#Java-ORM-框架" class="headerlink" title="Java ORM 框架"></a><strong>Java ORM 框架</strong></h1><hr>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-ejb3jpa.html" target="_blank" rel="external">使用 EJB 3.0 Java Persistence API 设计企业应用程序 </a></strong></p>
+<p>JPA 提供了一种标准的对象关系映射解决方案，该解决方案避免了依赖第三方框架（如 Hibernate）。您将看到示例应用程序的详细内容，其中验证了本方法并阐明关键设计决定。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/views/java/tutorials.jsp?cv_doc_id=156552" target="_blank" rel="external">教程：Spring 2 和 JPA 简介</a></strong></p>
+<p>Java 持久性 API （JPA）这是企业 JavaBean（EJB）3.0 规范的基石。在这份教程中，您将学习如何用 Spring 2 框架从头开始创建服务器应用程序。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/websphere/techjournal/0604_col_barcia/0604_col_barcia.html" target="_blank" rel="external">专家评论: Roland Barcia：Java Persistence API 中带注释的命名查询是否真的非常有用？</a></strong></p>
+<p>在 Java Persistence API (JPA) 中，注释用作将 Java 对象映射到底层数据库的一种机制，不过即使在注释没有任何意义时，开发人员也常常使用它。本文介绍通过 JPA 访问数据的一些其他方法，以及这些方法作为最佳选择的时间和原因。</p>
+<h2 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a><strong>Hibernate</strong></h2><p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-hibernate1/" target="_blank" rel="external">使用 Hibernate 来实现持久对象 </a></strong></p>
+<p>本文介绍如何在 Web 应用开发中配置 Hibernate 的环境，并且使用 Hibernate 来开发一个具体的实例。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/l-hibernate2/" target="_blank" rel="external">在 Hibernate 中实现复杂的数据映射</a></strong></p>
+<p>在本文，将介绍怎么在 Hibernate 中描述多个表的映射关系，并且演示怎么操作关系复杂的持久对象。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-hibern/" target="_blank" rel="external">无需容器的对象关系映射</a></strong></p>
+<p>本文用一个真实世界的例子向您介绍两个最激动人心的企业新技术。Hibernate 是一个对象关系映射工具，而 Spring 是一个 AOP 框架和 IOC 容器。本文介绍了如何结合这两者，为企业应用程序构建一个事务持久层。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-hibernate/" target="_blank" rel="external">Hibernate 简化继承映射</a></strong></p>
+<p>本文将介绍三个策略，在日常的编程之中您可以用它们把复杂的对象模型容易地映射到关系数据库模型。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-hibernate-ut/" target="_blank" rel="external">Hibernate 配置文件在单元测试中的灵活运用</a></strong></p>
+<p>本文讨论了 Hibernate 加载其配置文件 hibernate.properties 和 hibernate.cfg.xml 的过程，以及怎么样将 Hibernate 提供的配置文件的访问方法灵活运用到单元测试中。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/0306bhogal/0306bhogal.html" target="_blank" rel="external">使用 Hibernate 将 Java 对象持久保存到 IBM DB2 通用数据库中</a></strong></p>
+<p>Hibernate 是一个开放源码应用程序，提供了一种轻易地将 Java 对象持久保存到 DB2 通用数据库的方法。本文为您描述了其具体的使用过程。</p>
+<h2 id="iBatis"><a href="#iBatis" class="headerlink" title="iBatis"></a><strong>iBatis</strong></h2><p><strong><a href="http://www.ibm.com/developerworks/cn/websphere/techjournal/0510_col_barcia/0510_col_barcia.html" target="_blank" rel="external">Roland Barcia：厌烦了人工编码 JDBC？改用 iBatis 数据映射框架吧！</a></strong></p>
+<p>如果您厌烦了编写 JDBC，可以考虑使用另一个功能丰富的数据映射框架 iBatis，它能够实现大多数同样的功能，并且只需要编写非常少的代码。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-lo-ibatis/" target="_blank" rel="external">扩展 iBatis 以透明支持多种数据库</a></strong></p>
+<p>iBatis 是一个开源的对象关系映射框架，着重于 POJO 与 SQL 之间的映射关系。本文提供了一个简单有效的方法，通过扩展 iBatis 来透明地支持多数据库方言。</p>
+<h2 id="JDO"><a href="#JDO" class="headerlink" title="JDO"></a><strong>JDO</strong></h2><p><strong><a href="http://www.ibm.com/developerworks/cn/views/java/tutorials.jsp?cv_doc_id=84929" target="_blank" rel="external">教程：Java 数据对象上机实践</a></strong></p>
+<p>Java 数据对象（Java Data Objects (JDO)）是 Sun Microsystems 的一项新技术。本教程中，我们将使用讨论、代码样本以及上机练习来了解有关 JDO 的实际应用。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-tjdo/" target="_blank" rel="external">TriActive JDO 实用简介</a></strong></p>
+<p>TriActive JDO (TJDO) 是 Sun Java Data Objects (JDO) 1.0 规范的一个轻型的、开放源代码的实现。本文将通过一个例子介绍 TJDO，这个例子示范了如何在 MySQL 数据库中持久存储域模型。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/db2/library/techarticles/dm-0506bhogal/index.html" target="_blank" rel="external">通过 JPOX 和 DB2 Universal Database 了解 JDO 2.0</a></strong></p>
+<p>本文介绍了如何使用 Java Persistent Objects (JPOX) 将乏味的存取数据 SQL 语句的编写工作抽象为对象操作。我们展示了 JPOX 1.1，它被 Java Community Process 选作 Java Data Ojects 2.0 的参考实现。</p>
+<p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-jdo/" target="_blank" rel="external">JDO 技术分析及企业应用研究</a></strong></p>
+<p>JDO（Java Data Object）是 JCP 中较早开发出来并形成规范的 JSR-12，该规范对数据的持久化存储进行了一系列规范，并已有众多的商业产品和开源项目是基于该规范。作为一种需要引起重视的技术，研究并探讨其企业应用可行性是十分重要的。</p>
+<h2 id="Simple-Persistence-for-Java"><a href="#Simple-Persistence-for-Java" class="headerlink" title="Simple Persistence for Java"></a><strong>Simple Persistence for Java</strong></h2><p><strong><a href="http://www.ibm.com/developerworks/cn/java/j-sp4j/" target="_blank" rel="external">Simple Persistence for Java 的零配置对象持久性</a></strong></p>
+<p>Simple Persistence for Java 是一个开源的对象关系型持久性库，它使用定制查询语言以及内建数据库支持来简化 Java 应用程序中的对象持久性。在本文中，软件架构师 Sami Salkosuo 介绍了该库，并带您领略解决对象持久性的零管理以及零配置方法。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:46.000Z" itemprop="dateUpdated">2017-07-30 15:00:46</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/07/25/Java数据库开发专题/" target="_blank" rel="external">http://bestsonic.github.io/2015/07/25/Java数据库开发专题/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JDBC/">JDBC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据库开发/">数据库开发</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&title=《Java数据库开发专题》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&title=《Java数据库开发专题》 — 星之夢&source=Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java数据库开发专题》 — 星之夢&url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/07/27/Java笔记-JDBC/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java笔记-JDBC</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/07/23/软件设计的一些原则/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">软件设计的一些原则(转)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&title=《Java数据库开发专题》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&title=《Java数据库开发专题》 — 星之夢&source=Java 和数据库相结合后所产生的能量相当惊人。然而，要使它们结合工作却颇费周折 —— 这主要是因为 Java 处理的是对象，而大多数数据库却并不如此。通..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java数据库开发专题》 — 星之夢&url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/07/25/Java数据库开发专题/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

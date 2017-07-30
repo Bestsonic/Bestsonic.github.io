@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>Java笔记-IO流 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,IO流">
+    <meta name="description" content="Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1 个字节，操作字节和字节数组(byte)。 Java 内用 Unicode 编码存储字符，字符流处理类负责其他编码的字符流和 java 内 Unicode 字符流之间的转换。而类 InputStreamReader 和 OutputStreamW">
+<meta name="keywords" content="Java,IO流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java笔记-IO流">
+<meta property="og:url" content="http://bestsonic.github.io/2015/07/29/Java笔记-IO流/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1 个字节，操作字节和字节数组(byte)。 Java 内用 Unicode 编码存储字符，字符流处理类负责其他编码的字符流和 java 内 Unicode 字符流之间的转换。而类 InputStreamReader 和 OutputStreamW">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://bestsonic.github.io/img/io.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/inputstream.gif">
+<meta property="og:image" content="http://bestsonic.github.io/img/outputstream.gif">
+<meta property="og:image" content="http://bestsonic.github.io/img/inoutstream.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/reader.gif">
+<meta property="og:image" content="http://bestsonic.github.io/img/writer.gif">
+<meta property="og:image" content="http://bestsonic.github.io/img/inoutwriter.png">
+<meta property="og:updated_time" content="2017-07-30T07:00:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java笔记-IO流">
+<meta name="twitter:description" content="Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1 个字节，操作字节和字节数组(byte)。 Java 内用 Unicode 编码存储字符，字符流处理类负责其他编码的字符流和 java 内 Unicode 字符流之间的转换。而类 InputStreamReader 和 OutputStreamW">
+<meta name="twitter:image" content="http://bestsonic.github.io/img/io.jpg">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java笔记-IO流</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java笔记-IO流</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-07-29T01:30:00.000Z" itemprop="datePublished" class="page-time">
+  2015-07-29
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#以字节为导向的-Stream"><span class="post-toc-number">1.</span> <span class="post-toc-text">以字节为导向的 Stream</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#InputStream"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">InputStream</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OutputSteam"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">OutputSteam</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#字节流的输入与输出的对应"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">字节流的输入与输出的对应</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#以字符为导向的-stream-Reader-Writer"><span class="post-toc-number">2.</span> <span class="post-toc-text">以字符为导向的 stream Reader/Writer</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Reader"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Reader</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Writer"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Writer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#中间流"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">中间流</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#字符流的输入与输出的对应"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">字符流的输入与输出的对应</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#字符流与字节流转换"><span class="post-toc-number">3.</span> <span class="post-toc-text">字符流与字节流转换</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java-IO常用类"><span class="post-toc-number">4.</span> <span class="post-toc-text">Java IO常用类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#File类"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">File类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RandomAccessFile类"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">RandomAccessFile类</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Java-IO-的一般使用原则"><span class="post-toc-number">5.</span> <span class="post-toc-text">Java IO 的一般使用原则</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Java笔记-IO流"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java笔记-IO流</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-07-29 09:30:00" datetime="2015-07-29T01:30:00.000Z"  itemprop="datePublished">2015-07-29</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1 个字节，操作字节和字节数组(byte)。</p>
+<p>Java 内用 Unicode 编码存储字符，字符流处理类负责其他编码的字符流和 java 内 Unicode 字符流之间的转换。而类 InputStreamReader 和 OutputStreamWriter 处理字符流和字节流的转换。字符流（一次可以处理一个缓冲区）一次操作比字节流（一次一个字节）效率高。</p>
+<a id="more"></a>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/io.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<h1 id="以字节为导向的-Stream"><a href="#以字节为导向的-Stream" class="headerlink" title="以字节为导向的 Stream"></a><strong>以字节为导向的 Stream</strong></h1><hr>
+<p>InputStream 和 OutputStream 是两个 abstact 类，对于字节为导向的 stream 都扩展这两个基类。</p>
+<h2 id="InputStream"><a href="#InputStream" class="headerlink" title="InputStream"></a><strong>InputStream</strong></h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/inputstream.gif" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>InputStream 是所有的输入字节流的父类，它是一个抽象类。</p>
+<p>ByteArrayInputStream、StringBufferInputStream、FileInputStream 是三种基本的介质流，它们分别从Byte 数组、StringBuffer、和本地文件中读取数据。PipedInputStream 是从与其它线程共用的管道中读取数据，与Piped 相关的知识后续单独介绍。</p>
+<p>ObjectInputStream 和所有FilterInputStream 的子类都是装饰流（装饰器模式的主角）。</p>
+<p><strong>ByteArrayInputStream</strong> – 把内存中的一个缓冲区作为 InputStream 使用.</p>
+<p>构造器:</p>
+<p>(A) ByteArrayInputStream(byte[]) 创建一个新字节数组输入流（ByteArrayInputStream），它从指定字节数组中读取数据（使用 byte作为其缓冲区数组）。</p>
+<p>(B) ByteArrayInputStream(byte[], int, int) 创建一个新字节数组输入流，它从指定字节数组中读取数据。</p>
+<p><strong>mark: 该字节数组未被复制</strong></p>
+<p><strong>StringBufferInputStream</strong> – 把一个 String 对象作为 InputStream.</p>
+<p>构造器:</p>
+<p>StringBufferInputStream(String) 根据据指定串创建一个读取数据的输入流串。</p>
+<p><strong>注释：不推荐使用 StringBufferInputStream 方法。 此类不能将字符正确的转换为字节。</strong></p>
+<p>同 JDK 1.1 版中的类似，从一个串创建一个流的最佳方法是采用StringReader类。</p>
+<p><strong>FileInputStream</strong> – 把一个文件作为 InputStream ，实现对文件的读取操作.</p>
+<p>构造器:</p>
+<p>(A) FileInputStream(File name) 创建一个输入文件流，从指定的 File 对象读取数据。</p>
+<p>(B) FileInputStream(FileDescriptor) 创建一个输入文件流，从指定的文件描述器读取数据。</p>
+<p>(C) FileInputStream(String name) 创建一个输入文件流，从指定名称的文件读取数据。</p>
+<p>方法:</p>
+<p>read() 从当前输入流中读取一字节数据，返回值为int，防止返回值出现-1。</p>
+<p>read(byte[]) 将当前输入流中 b.length 个字节数据读到一个字节数组中。</p>
+<p>read(byte[], int, int) 将输入流中 len 个字节数据读入一个字节数组中。</p>
+<p><strong>PipedInputStream</strong> – 实现了 pipe 的概念，主要在线程中使用. 管道输入流是指一个通讯管道的接收端。</p>
+<p>一个线程通过管道输出流发送数据，而另一个线程通过管道输入流读取数据，这样<strong>可实现两个线程间的通讯</strong>。</p>
+<p>构造器:</p>
+<p>PipedInputStream() 创建一个管道输入流，它<strong>还未与一个管道输出流连接</strong>。</p>
+<p>PipedInputStream(PipedOutputStream) 创建一个管道输入流 , 它<strong>已连接到一个管道输出流</strong>。</p>
+<p><strong>SequenceInputStream</strong> – 把多个 InputStream 合并为一个 InputStream.</p>
+<p>“序列输入流”类允许应用程序把几个输入流连续地合并起来，并且使它们像单个输入流一样出现。每个输入流依次被读取，直到到达该流的末尾。然后“序列输入流”类关闭这个流并自动地切换到下一个输入流。</p>
+<p>构造器:</p>
+<p>SequenceInputStream(Enumeration) 创建一个新的序列输入流，并用指定的输入流的枚举值初始化它。</p>
+<p>SequenceInputStream(InputStream, InputStream) 创建一个新的序列输入流，初始化为首先 读输入流s1, 然后读输入流s2。</p>
+<h2 id="OutputSteam"><a href="#OutputSteam" class="headerlink" title="OutputSteam"></a><strong>OutputSteam</strong></h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/outputstream.gif" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>IO 中输出字节流的继承图可见上图，可以看出：</p>
+<p>OutputStream 是所有的输出字节流的父类，它是一个抽象类。</p>
+<p>ByteArrayOutputStream、FileOutputStream 是两种基本的介质流，它们分别向Byte 数组、和本地文件中写入数据。PipedOutputStream 是向与其它线程共用的管道中写入数据。</p>
+<p>ObjectOutputStream 和所有FilterOutputStream 的子类都是装饰流。</p>
+<p><strong>ByteArrayOutputStream</strong> – 把信息存入内存中的一个缓冲区中 . 该类实现一个以字节数组形式写入数据的输出流。</p>
+<p>当数据写入缓冲区时，它自动扩大。<strong>用 toByteArray() 和 toString() 能检索数据。</strong></p>
+<p>构造器:</p>
+<p>(A) ByteArrayOutputStream() 创建一个新的字节数组输出流。</p>
+<p>(B) ByteArrayOutputStream(int) 创建一个新的字节数组输出流，并带有指定大小字节的缓冲区容量。</p>
+<p>方法：</p>
+<p>toString(String) 根据指定字符编码将缓冲区内容转换为字符串，并将字节转换为字符。</p>
+<p>write(byte[], int, int) 将指定字节数组中从偏移量 off 开始的 len 个字节写入该字节数组输出流。</p>
+<p>write(int) 将指定字节写入该字节数组输出流。</p>
+<p>writeTo(OutputStream) 用 out.write(buf, 0, count) 调用输出流的写方法将该字节数组输出流的全部内容写入指定的输出流参数。</p>
+<p><strong>FileOutputStream</strong> – 文件输出流是向 File 或 FileDescriptor 输出数据的一个输出流。</p>
+<p>构造器:</p>
+<p>(A) FileOutputStream(File name) 创建一个文件输出流，向指定的 File 对象输出数据。</p>
+<p>(B) FileOutputStream(FileDescriptor) 创建一个文件输出流，向指定的文件描述器输出数据。</p>
+<p>(C) FileOutputStream(String name) 创建一个文件输出流，向指定名称的文件输出数据。</p>
+<p>(D) FileOutputStream(String, boolean) 用指定系统的文件名，创建一个输出文件。</p>
+<p><strong>PipedOutputStream</strong> – 管道输出流是指一个通讯管道的发送端。 一个线程通过管道输出流发送数据，而另一个线程通过管道输入流读取数据，这样可实现两个线程间的通讯。</p>
+<p>构造器:</p>
+<p>(A) PipedOutputStream() 创建一个管道输出流，它还<strong>未与一个管道输入流连接</strong>。</p>
+<p>(B) PipedOutputStream(PipedInputStream) 创建一个管道输出流，它<strong>已连接到一个管道输入流</strong>。</p>
+<h2 id="字节流的输入与输出的对应"><a href="#字节流的输入与输出的对应" class="headerlink" title="字节流的输入与输出的对应"></a><strong>字节流的输入与输出的对应</strong></h2><p><img src="/img/inoutstream.png" alt=""></p>
+<p>图中蓝色的为主要的对应部分，红色的部分就是不对应部分。紫色的虚线部分代表这些流一般要搭配使用。从上面的图中可以看出Java IO 中的字节流是极其对称的。“存在及合理”我们看看这些字节流中不太对称的几个类吧！</p>
+<ol>
+<li><p>LineNumberInputStream 主要完成从流中读取数据时，会得到相应的行号，至于什么时候分行、在哪里分行是由改类主动确定的，并不是在原始中有这样一个行号。在输出部分没有对应的部分，我们完全可以自己建立一个LineNumberOutputStream，在最初写入时会有一个基准的行号，以后每次遇到换行时会在下一行添加一个行号，看起来也是可以的。好像更不入流了。</p>
+</li>
+<li><p>PushbackInputStream 的功能是查看最后一个字节，不满意就放入缓冲区。主要用在编译器的语法、词法分析部分。输出部分的BufferedOutputStream 几乎实现相近的功能。</p>
+</li>
+<li><p>StringBufferInputStream 已经被Deprecated，本身就不应该出现在InputStream 部分，主要因为String 应该属于字符流的范围。已经被废弃了，当然输出部分也没有必要需要它了！还允许它存在只是为了保持版本的向下兼容而已。</p>
+</li>
+<li><p>SequenceInputStream 可以认为是一个工具类，将两个或者多个输入流当成一个输入流依次读取。完全可以从IO 包中去除，还完全不影响IO 包的结构，却让其更“纯洁”――纯洁的Decorator 模式。</p>
+</li>
+<li><p>PrintStream 也可以认为是一个辅助工具。主要可以向其他输出流，或者FileInputStream 写入数据，本身内部实现还是带缓冲的。本质上是对其它流的综合运用的一个工具而已。一样可以踢出IO 包！System.out 和System.out 就是PrintStream 的实例！</p>
+</li>
+</ol>
+<h1 id="以字符为导向的-stream-Reader-Writer"><a href="#以字符为导向的-stream-Reader-Writer" class="headerlink" title="以字符为导向的 stream Reader/Writer"></a><strong>以字符为导向的 stream Reader/Writer</strong></h1><hr>
+<p>以 Unicode 字符为导向的 stream ，表示以 Unicode 字符为单位从 stream 中读取或往 stream 中写入信息。</p>
+<p>Reader/Writer 为 abstract 类</p>
+<p>以 Unicode 字符为导向的 stream 包括下面几种类型：</p>
+<h2 id="Reader"><a href="#Reader" class="headerlink" title="Reader"></a><strong>Reader</strong></h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/reader.gif" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在上面的继承关系图中可以看出：</p>
+<p>Reader 是所有的输入字符流的父类，它是一个抽象类。</p>
+<p>CharReader、StringReader 是两种基本的介质流，它们分别将Char 数组、String中读取数据。PipedReader 是从与其它线程共用的管道中读取数据。</p>
+<p>BufferedReader 很明显就是一个装饰器，它和其子类负责装饰其它Reader 对象。</p>
+<p>FilterReader 是所有自定义具体装饰流的父类，其子类PushbackReader 对Reader 对象进行装饰，会增加一个行号。</p>
+<p>InputStreamReader 是一个连接字节流和字符流的桥梁，它将字节流转变为字符流。FileReader 可以说是一个达到此功能、常用的工具类，在其源代码中明显使用了将FileInputStream 转变为Reader 的方法。我们可以从这个类中得到一定的技巧。Reader 中各个类的用途和使用方法基本和InputStream 中的类使用一致。后面会有Reader 与InputStream 的对应关系。</p>
+<p><strong>CharArrayReader</strong> – 与 ByteArrayInputStream 对应此类实现一个可用作字符输入流的字符缓冲区</p>
+<p>构造器:</p>
+<p>CharArrayReader(char[]) 用指定字符数组创建一个 CharArrayReader。</p>
+<p>CharArrayReader(char[], int, int) 用指定字符数组创建一个 CharArrayReader</p>
+<p><strong>StringReader</strong> – 与 StringBufferInputStream 对应其源为一个字符串的字符流。</p>
+<p>构造器:</p>
+<p>StringReader(String) 创建一新的串读取者。</p>
+<p><strong>FileReader</strong> – 与 FileInputStream 对应</p>
+<p><strong>PipedReader</strong> – 与 PipedInputStream 对应</p>
+<h2 id="Writer"><a href="#Writer" class="headerlink" title="Writer"></a><strong>Writer</strong></h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/writer.gif" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在上面的关系图中可以看出：</p>
+<p>Writer 是所有的输出字符流的父类，它是一个抽象类。</p>
+<p>CharArrayWriter、StringWriter 是两种基本的介质流，它们分别向Char 数组、String 中写入数据。PipedWriter 是向与其它线程共用的管道中写入数据。</p>
+<p>BufferedWriter 是一个装饰器为Writer 提供缓冲功能。</p>
+<p>PrintWriter 和PrintStream 极其类似，功能和使用也非常相似。</p>
+<p>OutputStreamWriter 是OutputStream 到Writer 转换的桥梁，它的子类FileWriter 其实就是一个实现此功能的具体类（具体可以研究一SourceCode）。功能和使用和OutputStream 极其类似，后面会有它们的对应图。</p>
+<p><strong>CharArrayWrite</strong> – 与ByteArrayOutputStream对应</p>
+<p><em>*StringWrite</em> – 与之对应的以字节为导向的stream</p>
+<p><strong>FileWrite</strong> – 与 FileOutputStream 对应</p>
+<p><strong>PipedWrite</strong> – 与 PipedOutputStream 对应</p>
+<h2 id="中间流"><a href="#中间流" class="headerlink" title="中间流"></a><strong>中间流</strong></h2><p><strong>InputStreamReader和OutputStreamReader</strong></p>
+<p>把一个以字节为导向的 stream 转换成一个以字符为导向的 stream 。</p>
+<p>InputStreamReader 类是从字节流到字符流的桥梁：它读入字节，并根据指定的编码方式，将之转换为字符流。</p>
+<p>使用的编码方式可能由名称指定，或平台可接受的缺省编码方式。</p>
+<p>InputStreamReader 的 read() 方法之一的每次调用，可能促使从基本字节输入流中读取一个或多个字节。</p>
+<p>为了达到更高效率，考虑用 BufferedReader 封装 InputStreamReader ，</p>
+<pre><code>BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+</code></pre><p>InputStreamReader(InputStream) 用缺省的字符编码方式(默认GBK)，创建一个 InputStreamReader 。</p>
+<p>InputStreamReader(InputStream, String) 用已命名的字符编码方式，创建一个 InputStreamReader 。</p>
+<p>OutputStreamWriter 将多个字符写入到一个输出流，根据指定的字符编码将多个字符转换为字节。</p>
+<p>每个 OutputStreamWriter 合并它自己的 CharToByteConverter, 因而是从字符流到字节流的桥梁。</p>
+<h2 id="字符流的输入与输出的对应"><a href="#字符流的输入与输出的对应" class="headerlink" title="字符流的输入与输出的对应"></a><strong>字符流的输入与输出的对应</strong></h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/inoutwriter.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<h1 id="字符流与字节流转换"><a href="#字符流与字节流转换" class="headerlink" title="字符流与字节流转换"></a><strong>字符流与字节流转换</strong></h1><hr>
+<p>转换流的特点：</p>
+<ol>
+<li><p>其是字符流和字节流之间的桥梁</p>
+</li>
+<li><p>可对读取到的字节数据经过指定编码转换成字符</p>
+</li>
+<li><p>可对读取到的字符数据经过指定编码转换成字节</p>
+</li>
+</ol>
+<p>何时使用转换流？</p>
+<ol>
+<li><p>当字节和字符之间有转换动作时</p>
+</li>
+<li><p>流操作的数据需要编码或解码时</p>
+</li>
+</ol>
+<p>具体的对象体现：</p>
+<ol>
+<li><p>InputStreamReader:字节到字符的桥梁</p>
+</li>
+<li><p>OutputStreamWriter:字符到字节的桥梁</p>
+</li>
+</ol>
+<p>这两个流对象是字符体系中的成员，它们有转换作用，本身又是字符流，所以在构造的时候需要传入字节流对象进来。</p>
+<h1 id="Java-IO常用类"><a href="#Java-IO常用类" class="headerlink" title="Java IO常用类"></a><strong>Java IO常用类</strong></h1><hr>
+<h2 id="File类"><a href="#File类" class="headerlink" title="File类"></a><strong>File类</strong></h2><p>File类是对文件系统中文件以及文件夹进行封装的对象，可以通过对象的思想来操作文件和文件夹。 File类保存文件或目录的各种元数据信息，包括文件名、文件长度、最后修改时间、是否可读、获取当前文件的路径名，判断指定文件是否存在、获得当前目录中的文件列表，创建、删除文件和目录等方法。</p>
+<h2 id="RandomAccessFile类"><a href="#RandomAccessFile类" class="headerlink" title="RandomAccessFile类"></a><strong>RandomAccessFile类</strong></h2><p>该对象并不是流体系中的一员，其封装了字节流，同时还封装了一个缓冲区（字符数组），通过内部的指针来操作字符数组中的数据。 该对象特点：</p>
+<ol>
+<li><p>该对象只能操作文件，所以构造函数接收两种类型的参数：a.字符串文件路径；b.File对象。</p>
+</li>
+<li><p>该对象既可以对文件进行读操作，也能进行写操作，在进行对象实例化时可指定操作模式(r,rw)</p>
+</li>
+</ol>
+<p><strong>注意：该对象在实例化时，如果要操作的文件不存在，会自动创建；如果文件存在，写数据未指定位置，会从头开始写，即覆盖原有的内容。</strong>可以用于多线程下载或多个线程同时写数据到文件。</p>
+<h1 id="Java-IO-的一般使用原则"><a href="#Java-IO-的一般使用原则" class="headerlink" title="Java IO 的一般使用原则"></a><strong>Java IO 的一般使用原则</strong></h1><hr>
+<p>一、按数据来源（去向）分类：</p>
+<ol>
+<li><p>是文件： FileInputStream, FileOutputStream( 字节流 ), FileReader, FileWriter( 字符 )</p>
+</li>
+<li><p>是 byte[] ： ByteArrayInputStream, ByteArrayOutputStream( 字节流 )</p>
+</li>
+<li><p>是 Char[]: CharArrayReader, CharArrayWriter( 字符流 )</p>
+</li>
+<li><p>是 String: StringBufferInputStream, StringBufferOuputStream ( 字节流 )StringReader, StringWriter( 字符流 )</p>
+</li>
+<li><p>网络数据流： InputStream, OutputStream,( 字节流 ) Reader, Writer( 字符流 )</p>
+</li>
+</ol>
+<p>二、按是否格式化输出分：</p>
+<ol>
+<li>要格式化输出： PrintStream, PrintWriter</li>
+</ol>
+<p>三、按是否要缓冲分：</p>
+<ol>
+<li>要缓冲： BufferedInputStream, BufferedOutputStream,( 字节流 ) BufferedReader, BufferedWriter( 字符流 )</li>
+</ol>
+<p>四、按数据格式分：</p>
+<ol>
+<li><p>二进制格式（只要不能确定是纯文本的） : InputStream, OutputStream 及其所有带 Stream 结束的子类</p>
+</li>
+<li><p>纯文本格式（含纯英文与汉字或其他编码方式）； Reader, Writer 及其所有带 Reader, Writer 的子类</p>
+</li>
+</ol>
+<p>五、按输入输出分：</p>
+<ol>
+<li><p>输入： Reader, InputStream 类型的子类</p>
+</li>
+<li><p>输出： Writer, OutputStream 类型的子类</p>
+</li>
+</ol>
+<p>六、特殊需要：</p>
+<ol>
+<li><p>从 Stream 到 Reader, Writer 的转换类： InputStreamReader, OutputStreamWriter</p>
+</li>
+<li><p>对象输入输出： ObjectInputStream, ObjectOutputStream</p>
+</li>
+<li><p>进程间通信： PipeInputStream, PipeOutputStream, PipeReader, PipeWriter</p>
+</li>
+<li><p>合并输入： SequenceInputStream</p>
+</li>
+<li><p>更特殊的需要： PushbackInputStream, PushbackReader, LineNumberInputStream, LineNumberReader</p>
+</li>
+</ol>
+<p>决定使用哪个类以及它的构造进程的一般准则如下（不考虑特殊需要）：</p>
+<p>首先，考虑最原始的数据格式是什么：原则四</p>
+<p>第二，是输入还是输出：原则五</p>
+<p>第三，是否需要转换流：原则六第 1 点</p>
+<p>第四，数据来源（去向）是什么：原则一</p>
+<p>第五，是否要缓冲：原则三 （特别注明：一定要注意的是 readLine() 是否有定义，有什么比 read, write 更特殊的输入或输出方法）</p>
+<p>第六，是否要格式化输出：原则二</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:35.000Z" itemprop="dateUpdated">2017-07-30 15:00:35</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/07/29/Java笔记-IO流/" target="_blank" rel="external">http://bestsonic.github.io/2015/07/29/Java笔记-IO流/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO流/">IO流</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&title=《Java笔记-IO流》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&title=《Java笔记-IO流》 — 星之夢&source=Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-IO流》 — 星之夢&url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/08/01/Java笔记-安全/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java笔记-安全</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/07/27/Java笔记-JDBC/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java笔记-JDBC</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&title=《Java笔记-IO流》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&title=《Java笔记-IO流》 — 星之夢&source=Java流在处理上分为字符流和字节流。字符流单元处理 2 个字节的 Unicode 字符，分别操作字符、字符数组或字符串(char)，而字节流单元处理 1..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-IO流》 — 星之夢&url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/07/29/Java笔记-IO流/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>Java笔记-JDBC | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JDBC,Java">
+    <meta name="description" content="JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。 Hibernate、TopLink等OR Mapping操作数据库的技术都是建立JDBC技术之上的，实际来说，他们的性能和JDBC是有很大差距的，但反过来说，如果JDBC用不好，还不如hibernate呢。暂且不说这些孰优孰劣的话了，再次主要是对Java的基础技术做个总结，以加深">
+<meta name="keywords" content="JDBC,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java笔记-JDBC">
+<meta property="og:url" content="http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。 Hibernate、TopLink等OR Mapping操作数据库的技术都是建立JDBC技术之上的，实际来说，他们的性能和JDBC是有很大差距的，但反过来说，如果JDBC用不好，还不如hibernate呢。暂且不说这些孰优孰劣的话了，再次主要是对Java的基础技术做个总结，以加深">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans1.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans2.png">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans3.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans4.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans5.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-trans6.jpg">
+<meta property="og:image" content="http://bestsonic.github.io/img/jdbc-transaction.png">
+<meta property="og:updated_time" content="2017-07-30T07:00:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java笔记-JDBC">
+<meta name="twitter:description" content="JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。 Hibernate、TopLink等OR Mapping操作数据库的技术都是建立JDBC技术之上的，实际来说，他们的性能和JDBC是有很大差距的，但反过来说，如果JDBC用不好，还不如hibernate呢。暂且不说这些孰优孰劣的话了，再次主要是对Java的基础技术做个总结，以加深">
+<meta name="twitter:image" content="http://bestsonic.github.io/img/jdbc-trans1.png">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Java笔记-JDBC</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Java笔记-JDBC</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-07-27T02:30:00.000Z" itemprop="datePublished" class="page-time">
+  2015-07-27
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JDBC的基本原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">JDBC的基本原理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#JDBC驱动的四种类型"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">JDBC驱动的四种类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JDBC编程流程"><span class="post-toc-number">2.</span> <span class="post-toc-text">JDBC编程流程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建指定数据库的URL"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">创建指定数据库的URL</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#加载驱动类到JVM内存区域中"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">加载驱动类到JVM内存区域中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通过DriverManager类管理驱动、创建数据库连接"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">通过DriverManager类管理驱动、创建数据库连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection类——数据库连接"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">Connection类——数据库连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Statement类——发送并执行（静态）SQL语句"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">Statement类——发送并执行（静态）SQL语句</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ResultSet类——结果集"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">ResultSet类——结果集</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关闭数据库连接"><span class="post-toc-number">2.7.</span> <span class="post-toc-text">关闭数据库连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#几种特殊且比较常用的类型"><span class="post-toc-number">2.8.</span> <span class="post-toc-text">几种特殊且比较常用的类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JDBC编程实例"><span class="post-toc-number">3.</span> <span class="post-toc-text">JDBC编程实例</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#事务的隔离级别"><span class="post-toc-number">4.</span> <span class="post-toc-text">事务的隔离级别</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#数据库事务的ACID特性"><span class="post-toc-number">5.</span> <span class="post-toc-text">数据库事务的ACID特性</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JDBC事务编程"><span class="post-toc-number">6.</span> <span class="post-toc-text">JDBC事务编程</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Java笔记-JDBC"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Java笔记-JDBC</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-07-27 10:30:00" datetime="2015-07-27T02:30:00.000Z"  itemprop="datePublished">2015-07-27</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。</p>
+<p>Hibernate、TopLink等OR Mapping操作数据库的技术都是建立JDBC技术之上的，实际来说，他们的性能和JDBC是有很大差距的，但反过来说，如果JDBC用不好，还不如hibernate呢。暂且不说这些孰优孰劣的话了，再次主要是对Java的基础技术做个总结，以加深认识。</p>
+<a id="more"></a>
+<h1 id="JDBC的基本原理"><a href="#JDBC的基本原理" class="headerlink" title="JDBC的基本原理"></a><strong>JDBC的基本原理</strong></h1><hr>
+<p>JDBC是Java操作数据库的技术规范。他实际上定义了一组标准的操作数据库的接口。为了能让Java操作数据库，必须要有实现了JDBC这些接口的类，不同的数据库厂商为了让Java语言能操作自己的数据库，都提供了对JDBC接口的实现–这些实现了JDBC接口的类打成一个jar包，就是我们平时看到的数据库驱动。由于不同的数据库操作数据的机制不一样，因此JDBC的具体实现也就千差万别，但是你作为java程序员，你只和Java JDBC的接口打交到，才不用理会他们怎么实现的！呵呵，现在知道JDBC驱动是怎么回事了。</p>
+<h2 id="JDBC驱动的四种类型"><a href="#JDBC驱动的四种类型" class="headerlink" title="JDBC驱动的四种类型"></a><strong>JDBC驱动的四种类型</strong></h2><p>Java中的JDBC驱动可以分为四种类型，包括JDBC-ODBC桥、本地API驱动、网络协议驱动和本地协议驱动。</p>
+<p><strong>JDBC驱动类型一——JDBC-ODBC桥</strong></p>
+<p>JDBC-ODBC 桥 是sun公司提供的，是jdk提供的的标准API. 这种类型的驱动实际是把所有 JDBC的调用传递给ODBC ,再由ODBC调用本地数据库驱动代码.( 本地数据库驱动代码是指 由数据库厂商提供的数据库操作二进制代码库,例如在oracle for windows中就是oci dll 文 件)</p>
+<p>只要本地机装有相关的ODBC驱动那么采用JDBC-ODBC桥几乎可以访问所有的数据库,JDBC- ODBC方法对于客户端已经具备ODBC driver的应用还是可行的.</p>
+<p>但是,由于JDBC-ODBC先调用 ODBC再由ODBC去调用本地数据库接口访问数据库.所以,执行效率比较低,对于那些大数据量 存取的应用是不适合的.而且,这种方法要求客户端必须安装ODBC 驱动,所以对于基于 internet ,intranet的应用也是不合适的.因为,你不可能要求所有客户都能找到ODBC driver.</p>
+<p><strong>JDBC驱动类型二——本地API驱动</strong></p>
+<p>本地API驱动直接把JDBC调用转变为数据库的标准调用再去访问数据库.</p>
+<p>这种方法需要本地 数据库驱动代码. 本地API驱动 | 厂商DB代码—————数据库Server (图二) 这种驱动比起JDBC-ODBC桥执行效率大大提高了.但是,它仍然需要在客户端加载数据库厂商 提供的代码库.这样就不适合基于internet的应用.并且,他的执行效率比起3,4型的JDBC驱动 还是不够高.</p>
+<p><strong>JDBC驱动类型三——网络协议驱动</strong></p>
+<p>这种驱动实际上是根据我们熟悉的三层结构建立的. JDBC先把对数局库的访问请求传递给网 络上的中间件服务器. 中间件服务器再把请求翻译为符合数据库规范的调用,再把这种调用 传给数据库服务器.如果中间件服务器也是用java开法的,那么在在中间层也可以使用1,2型 JDBC驱动程序作为访问数据库的方法. 网络协议驱动———中间件服务器————数据库Server</p>
+<p>由于这种驱动是基于server的.所以,它不需要在客户端加载数据库厂商提供的代码库.而且 他在执行效率和可升级性方面是比较好的.因为大部分功能实现都在server端,所以这种驱动 可以设计的很小,可以非常快速的加载到内存中. 但是,这种驱动在中间件层仍然需要有配置 其它数据库驱动程序,并且由于多了一个中间层传递数据,它的执行效率还不是最好.</p>
+<p><strong>JDBC驱动类型四——本地协议驱动</strong></p>
+<p>这种驱动直接把JDBC调用转换为符合相关数据库系统规范的请求.由于4型驱动写的应用可 以直接和数据库服务器通讯.这种类型的驱动完全由java实现,因此实现了平台独立性. 本地协议驱动———数据库Server</p>
+<p>由于这种驱动不需要先把JDBC的调用传给ODBC或本地数据库接口或者是中间层服务器.所 以它的执行效率是非常高的.而且,它根本不需要在客户端或服务器端装载任何的软件或驱动. 这种驱动程序可以动态的被下载.但是对于不同的数据库需要下载不同的驱动程序.</p>
+<p>以上对四种类型的JDBC驱动做了一个说明.那么它们适合那种类型的应用开发呢?</p>
+<p>JDBC-ODBC桥由于它的执行效率不高,更适合做为开发应用时的一种过度方案,或着对于初学 者了解JDBC编程也较适用. 对于那些需要大数据量操作的应用程序则应该考虑2,3,4型驱动.在intranet方面的应用可以 考虑2型驱动,但是由于3,4型驱动在执行效率上比2型驱动有着明显的优势,而且目前开发 的趋势是使用纯java.所以3,4型驱动也可以作为考虑对象. 至于基于internet方面的应用就只有考虑3,4型驱动了. 因为3型驱动可以把多种数据库驱 动都配置在中间层服务器.所以3型驱动最适合那种需要同时连接多个不同种类的数据库, 并且对并发连接要求高的应用. 4型驱动则适合那些连接单一数据库的工作组应用。</p>
+<h1 id="JDBC编程流程"><a href="#JDBC编程流程" class="headerlink" title="JDBC编程流程"></a><strong>JDBC编程流程</strong></h1><hr>
+<p>为了说明这个步骤，假设你要通过java程序执行一个sql查询，你需要按照如下的流程去走：</p>
+<h2 id="创建指定数据库的URL"><a href="#创建指定数据库的URL" class="headerlink" title="创建指定数据库的URL"></a><strong>创建指定数据库的URL</strong></h2><p>这个URL实际上还是统一资源定位器，里面包含了一些连接数据库的信息：数据库类型、端口、驱动类型、连接方式、数据库服务器的ip(或名字)、数据库名（有的是别名）等。其格式如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">jdbc:</span><span class="string">subProtocol:</span><span class="string">subName:</span><span class="comment">//DBserverIP:port/DatabaseName</span></div></pre></td></tr></table></figure>
+<p>例如mysql的一个url：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">jdbc:</span><span class="string">mysql:</span><span class="comment">//192.168.3.143:3306/zfvims</span></div></pre></td></tr></table></figure>
+<h2 id="加载驱动类到JVM内存区域中"><a href="#加载驱动类到JVM内存区域中" class="headerlink" title="加载驱动类到JVM内存区域中"></a><strong>加载驱动类到JVM内存区域中</strong></h2><p>有两种方法：</p>
+<ul>
+<li><p>一种是用Class.forName()方法加载指定的驱动程序。推荐这种方法，不会对具体的驱动类产生依赖。</p>
+</li>
+<li><p>一种是DriverManager.registerDriver(new com.mysql.jdbc.Driver())方法。这种方法会两次注册驱动，而且对具体的驱动依赖。</p>
+</li>
+<li><p>一种是System.setProperty(“jdbc.drivers”, “driver1:driver2”)方法，将驱动程序添加到java.lang.System的属性jdbc.drivers中。注册不太方便。</p>
+</li>
+</ul>
+<p>最后说明一点，有时候添加到系统的CLASSPATH环境变量是不行的，原因是在使用JDBC接口操作数据库前，JVM还没有加载上驱动。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">Class</span><span class="selector-class">.forName</span>("<span class="selector-tag">com</span><span class="selector-class">.mysql</span><span class="selector-class">.jdbc</span><span class="selector-class">.Driver</span>");</div></pre></td></tr></table></figure>
+<h2 id="通过DriverManager类管理驱动、创建数据库连接"><a href="#通过DriverManager类管理驱动、创建数据库连接" class="headerlink" title="通过DriverManager类管理驱动、创建数据库连接"></a><strong>通过DriverManager类管理驱动、创建数据库连接</strong></h2><p>DriverManager类作用于程序员和JDBC驱动程序之间，提供注册管理驱动建立连接细节等方法，它所有成员均为静态的。通过其getConnection方法会创建一个JDBC Connection对象。</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">Connection conn</span>=DriverManager.registerDriver(<span class="string">"jdbc:mysql://192.168.3.143:3306/zfvims"</span>,<span class="string">"lavasoft"</span>,<span class="string">"password"</span>);</div></pre></td></tr></table></figure>
+<h2 id="Connection类——数据库连接"><a href="#Connection类——数据库连接" class="headerlink" title="Connection类——数据库连接"></a><strong>Connection类——数据库连接</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connection conn = DriverManager.getConnection(url, user, password);</div></pre></td></tr></table></figure>
+<p>url格式：JDBC:子协议:子名称//主机名:端口/数据库名？属性名=属性值&amp;…</p>
+<p>User,password可以用“属性名=属性值”方式告诉数据库；</p>
+<p>其他参数如：useUnicode=true&amp;characterEncoding=GBK。</p>
+<p>这里所说的Connection类实际上是实现了JDBC的Connection接口的类，这个类一般都是jdbc驱动程序实现了。Connection类表示了数据库连接，通过其对象可以获取一个获取数据库和表等数据库对象的详细信息。但更多的是通过这个连接更进一步去向数据库发送SQL语句去执行，下面会讲到。</p>
+<p>数据库的连接的建立是很耗费资源和时间的，因此在不用连接的情况下要通过其close()方法将连接关闭，以释放系统资源。</p>
+<h2 id="Statement类——发送并执行（静态）SQL语句"><a href="#Statement类——发送并执行（静态）SQL语句" class="headerlink" title="Statement类——发送并执行（静态）SQL语句"></a><strong>Statement类——发送并执行（静态）SQL语句</strong></h2><p>Statement是一个SQL执行器，可以用来执行一个静态的SQL语句。通过Connection对象的createStatement()方法可以创建一个Statement对象，通过该对象的方法可以（发送）并执行一个静态sql语句。如果要执行动态的sql（sql串中有参数），那么就用PreparedStatement类，用法和Statement类似。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Statement st = con.createStatement()<span class="comment">;</span></div><div class="line">st.executeQuery(sql)<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>PreparedStatement是一个与定义的SQL执行器，一般较Statement有防止SQL注入的功能，还有较好的执行效率。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String sql = <span class="string">"select * from table_name where col_name=?"</span>;</div><div class="line">PreparedStatement ps = conn.preparedStatement(sql);</div><div class="line">ps.setString(<span class="number">1</span>, <span class="string">"col_value"</span>);</div><div class="line">ps.executeQuery();</div></pre></td></tr></table></figure>
+<p>在数据库连接没有关闭的情况下，数据库和驱动可以对PreperedStatement进行优化，PreperedStatement对象可以被重用，从而避免频繁编译SQL。</p>
+<h2 id="ResultSet类——结果集"><a href="#ResultSet类——结果集" class="headerlink" title="ResultSet类——结果集"></a><strong>ResultSet类——结果集</strong></h2><p>当你执行一条sql查询后，就会产生一个查询结果。ResultSet就表示数据库结果集的数据表，通常通过执行查询数据库的语句生成。ResultSet 对象具有指向其当前数据行的指针。通过ResultSet对象不但可以结果集数据，还可以获取结果集表的列名、数据类型等信息。</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ResultSet rs = statement.executeQuery(sql)<span class="comment">;</span></div><div class="line">While(rs.next())&#123;</div><div class="line"> rs.getString(“col_name”)<span class="comment">;</span></div><div class="line"> rs.getInt(“col_name”)<span class="comment">;</span></div><div class="line"> //…</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="关闭数据库连接"><a href="#关闭数据库连接" class="headerlink" title="关闭数据库连接"></a><strong>关闭数据库连接</strong></h2><p>当对sql操作完成后，应该关闭数据库连接，这样避免因为连接未关闭而耗费系统资源，如果每次都不关闭，多次操作将建立多个连接，最终数据库连接会达到最大限度，或者耗尽系统的资源，从而导致应用崩溃。因此要注意关闭资源，尤其是数据库连接。</p>
+<p>释放资源的顺序是ResultSet, Statement,Connection;</p>
+<p>Connection在使用完成后，必须关闭，ResultSet, Statement无所谓，只要Connection关闭了，它们也会被自动关闭（但资源不是立即被释放）。</p>
+<p>Connection的使用原则是尽量晚创建，尽量早的释放。</p>
+<p>在关闭资源异常的情况下，应该将资源赋null值，以确保资源最大可能的被释放掉。</p>
+<h2 id="几种特殊且比较常用的类型"><a href="#几种特殊且比较常用的类型" class="headerlink" title="几种特殊且比较常用的类型"></a><strong>几种特殊且比较常用的类型</strong></h2><ol>
+<li>DATA,TIME,TIMESTAMP date,time,datetime</li>
+</ol>
+<p>存：ps.setDate(i,d); ps.setTime(i,t); ps.setTimestamp(i, ts);</p>
+<p>取：rs.getDate(i); rs.getTime(i); rs.getTimestamp(i);</p>
+<ol>
+<li>CLOB text</li>
+</ol>
+<p>存：ps.setCharacterStream(index, reader, length);<br>    ps.setString(i, s);</p>
+<p>取：reader = rs. getCharacterStream(i);<br>    reader = rs.getClob(i).getCharacterStream();<br>    string = rs.getString(i);</p>
+<ol>
+<li>BLOB blob</li>
+</ol>
+<p>存：ps.setBinaryStream(i, inputStream, length);</p>
+<p>取：rs.getBinaryStream(i);<br>    rs.getBlob(i).getBinaryStream();</p>
+<h1 id="JDBC编程实例"><a href="#JDBC编程实例" class="headerlink" title="JDBC编程实例"></a><strong>JDBC编程实例</strong></h1><hr>
+<p>下面通过一个执行一条简单的MySQL查询来说名上面的JDBC编程的一般方法和步骤。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> class <span class="title">TestJDBC</span><span class="params">()</span></span>&#123;  </div><div class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnectionByJDBC</span><span class="params">()</span> </span>&#123;  </div><div class="line">          Connection conn = <span class="keyword">null</span>;  </div><div class="line">          <span class="keyword">try</span> &#123;  </div><div class="line">              <span class="comment">//装载驱动类  </span></div><div class="line">              Class.forName(<span class="string">"com.mysql.jdbc.Driver"</span>);  </div><div class="line">           &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;  </div><div class="line">              System.out.println(<span class="string">"装载驱动异常!"</span>);  </div><div class="line">              e.printStackTrace();  </div><div class="line">			&#125;  </div><div class="line">         <span class="keyword">try</span> &#123;  </div><div class="line">             <span class="comment">//建立JDBC连接  </span></div><div class="line">             conn = DriverManager.getConnection(<span class="string">""</span>jdbc:mysql:<span class="comment">//192.168.3.143:3306/zfvims","lavasoft","password");  </span></div><div class="line">         &#125; <span class="keyword">catch</span> (SQLException e) &#123;  </div><div class="line">             System.out.println(<span class="string">"链接数据库异常!"</span>);  </div><div class="line">             e.printStackTrace();  </div><div class="line">         &#125;  </div><div class="line">         <span class="keyword">return</span> conn;  </div><div class="line">     &#125;  </div><div class="line"></div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">test</span><span class="params">()</span> </span>&#123;  </div><div class="line">         String sqlx = <span class="string">"select t.code,t.name from province t order by t.code asc"</span>;  </div><div class="line">         <span class="keyword">try</span> &#123;  </div><div class="line">             <span class="comment">//创建一个JDBC声明  </span></div><div class="line">             Statement stmt = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);  </div><div class="line">             <span class="comment">//执行查询  </span></div><div class="line">             ResultSet = stmt.executeQuery(sqlx);  </div><div class="line">             <span class="keyword">while</span> (rs.next()) &#123;  </div><div class="line">                 String code = rs.getString(<span class="string">"code"</span>);  </div><div class="line">                 String name = rs.getString(<span class="string">"name"</span>);  </div><div class="line">                 System.out.println(code+name);  </div><div class="line">             &#125;  </div><div class="line">         &#125; <span class="keyword">catch</span> (SQLException e) &#123;  </div><div class="line">             System.out.println(e.getMessage());  </div><div class="line">             e.printStackTrace();  </div><div class="line">         &#125; <span class="keyword">finally</span> &#123;  </div><div class="line">             <span class="comment">//预防性关闭连接（避免异常发生时在try语句块关闭连接没有执行）  </span></div><div class="line">             <span class="keyword">try</span> &#123;  </div><div class="line">                 <span class="keyword">if</span> (conn != <span class="keyword">null</span>) conn.close();  </div><div class="line">             &#125; <span class="keyword">catch</span> (SQLException e) &#123;  </div><div class="line">                 System.out.println(e.getMessage());  </div><div class="line">                 e.printStackTrace();  </div><div class="line">             &#125;  </div><div class="line">         &#125;  </div><div class="line">     &#125;     </div><div class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> </span>&#123;  </div><div class="line">         <span class="keyword">new</span> TestJDBC().test();  </div><div class="line">     &#125;   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a><strong>事务的隔离级别</strong></h1><hr>
+<p><strong>更新遗失(Lost update)</strong></p>
+<p>两个事务都同时更新一行数据，但是第二个事务却中途失败退出，导致对数据的两个修改都失效了。这是因为系统没有执行任何的锁操作，因此并发事务并没有被隔离开来。</p>
+<p>基本上就是指某个事务对字段进行更新的信息，因另一个事务的介入而遗失更新效力。举例来说，若某个字段数据原为 ZZZ，用户 A、B 分别在不同的时间点对同一字段进行更新事务，如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans1.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>单就用户 A 的事务而言，最后字段应该是 OOO，单就用户 B 的事务而言，最后字段应该是 ZZZ。在完全没有隔离两者事务的情况下，由于用户 B 撤销操作时间在用户 A 确认之后，因此最后字段结果会 是ZZZ，用户A看不到他新确认 的OOO 结果，用 户A 发生更新遗失问题。</p>
+<p>如果要避免更新遗失问题，需要设置隔离级别为“可读取未确认”（Read Uncommitted），如果一个事务已经开始写数据，则另外一个数据则不允许同时进行写操作，但允许其他事务读此行数据。</p>
+<p>该隔离级别可通过“排他写锁”实现。JDBC 可通过 Connection 的 setTransactionIsolation() 设置为 TRANSACTION_UNCOMMITTED 来提示数据库指定此隔离行为。</p>
+<p>实现后如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans2.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>提示数据库“可读取未确认”的隔离层次之后，数据库至少得保证事务能避免更新遗失问题，通常这也是具备事务功能的数据库引擎会采取的最低隔离层级。不过这个隔离层级读取错误数据的机率太高，一般默认不会采用这种隔离级别。</p>
+<p><strong>脏读（Dirty read）</strong></p>
+<p>两个事务同时进行，其中一个事务更新数据但未确认，另一个事务就读取数据，就有可能发生脏读问题，也就是读到所谓脏数据、不干净、不正确的数据。如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans3.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>如果要避免脏读问题，可以设置隔离层级为“可读取确认”(Read committed)。这可以通过“瞬间共享读锁”和“排他写锁”实现。读取数据的事务允许其他事务继续访问该行数据，但是未提交的写事务将会禁止其他事务访问该行。也就是事务读取的数据必须是其他事务已确认的数据。JDBC 可通过 Connection 的 setTransactionIsolation() 设置为 TRANSACTION_COMMITTED 来提示数据库指定此隔离行为。</p>
+<p>实现后如下图所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans4.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>提示数据库“可读取确认”的隔离层次之后，数据库至少得保证事务能避免脏读与更新遗失问题。</p>
+<p><strong>无法重复的读取（Unrepeatable read）</strong></p>
+<p>某个事务两次读取同一字段的数据并不一致。如下图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans5.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>如果要避免无法重复的读取问题， 可以设置隔离层级为“可重复读取”(Repeatable read)，这可以通过“共享读锁”和“排他写锁”实现。读取数据的事务将会禁止写事务（但允许读事务），写事务则禁止任何其他事务。也就是同一事务内两次读取的数据必须相同。JDBC 可通过 Connection 的 setTransactionIsolation() 设置为 TRANSACTION_REPEATABLE_READ 来提示数据库指定此隔离行为。</p>
+<p>实现后如下图所示：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-trans6.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在数据库上这个做法影响性能较大，另一个基本做法是事务正在读取但尚未确认前，另一事务会在暂存表格上更新。提示数据库“可重复读取”的隔离层次之后，数据库至少得保证事务能避免无法重复读取、脏读与更新遗失问题。</p>
+<p><strong>幻读(Phantom read)</strong></p>
+<p>同一事务期间，读取到的数据笔数不一致。例如，事务 A 第一次读取得到五笔数据，此时事务 B 新增了一笔数据，导致事务 B 再次读取得到六笔数据。</p>
+<p>如果隔离行为设置为可重复读取，但发生幻读现象，可以设置隔离层级为“可循序”(Serializable)，它要求事务序列化执行，事务只能一个接着一个地执行，但不能并发执行。如果仅仅通过“行级锁”是无法实现事务序列化的，必须通过其他机制保证新插入的数据不会被刚执行查询操作的事务访问到。也就是在有事务时若有数据不一致的疑虑，事务必须可以按照顺序逐一进行。JDBC 可通过 Connection 的 setTransactionIsolation() 设置为 TRANSACTION_SERIALIZABLE 来提示数据库指定此隔离行为。</p>
+<p>隔离级别越高，越能保证数据的完整性和一致性，但是对并发性能的影响也越大。对于多数应用程序，可以优先考虑把数据库系统的隔离级别设为 Read Committed。它能够避免脏读取，而且具有较好的并发性能。尽管它会导致不可重复读、虚读和第二类丢失更新这些并发问题，在可能出现这类问题的个别场合，可以由应用程序采用悲观锁或乐观锁来控制。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>隔离行为</strong></th>
+<th style="text-align:center"><strong>更新遗失</strong></th>
+<th style="text-align:center"><strong>脏读</strong></th>
+<th style="text-align:center"><strong>无法重复读取</strong></th>
+<th style="text-align:center"><strong>幻读</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">可读取未确认</td>
+<td style="text-align:center">Read Uncommitted</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">可读取确认</td>
+<td style="text-align:center">Read Uncommitted</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">可重复读取</td>
+<td style="text-align:center">Repeatable read</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">可循序</td>
+<td style="text-align:center">Serializable</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center">预防</td>
+<td style="text-align:center">预防</td>
+</tr>
+</tbody>
+</table>
+<h1 id="数据库事务的ACID特性"><a href="#数据库事务的ACID特性" class="headerlink" title="数据库事务的ACID特性"></a><strong>数据库事务的ACID特性</strong></h1><hr>
+<ol>
+<li><p>原子性(Atomicity)</p>
+<p>整个事务中的所有操作，要么全部完成，要么全部不完成，不可能停滞在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。</p>
+<p>例如：银行刷卡业务，当消费的时候 A 顾客的卡钱减少，然后 B 商城的账户加钱，只有当这 2 个操作都成功的时候才可以进行提交，否则都必须回滚。这就是事务的原子性，因为这 2 个操作不可以分开。</p>
+</li>
+<li><p>一致性(Consistency)</p>
+<p>在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。</p>
+<p>例如：有表 A 和表 B，表 A 中的一个字段 aa 是表 B 中 bb 字段的外键，并且 bb 字段是必填的，当在 B 表中插入数据的时候如果 bb 字段的值在 A 表中没有，则事务必须回滚否则会破坏数据库的完整性约束。</p>
+</li>
+<li><p>隔离性(Isolation)</p>
+<p>两个事务的执行是互不干扰的，一个事务不可能看到其他事务运行时，中间某一时刻的数据。</p>
+<p>例如：A 顾客银行卡刷的钱与 B 顾客互相不影响。</p>
+</li>
+<li><p>持久性(Durability)</p>
+<p>在事务完成以后，该事务所对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。</p>
+<p>例如：在A顾客消费成功后，银行卡的钱不可以被回滚。</p>
+</li>
+</ol>
+<h1 id="JDBC事务编程"><a href="#JDBC事务编程" class="headerlink" title="JDBC事务编程"></a><strong>JDBC事务编程</strong></h1><hr>
+<p>我们已经知道，事务的概念即：所有的操作要么同时成功，要么同时失败。在MySQL中提供了Commit、Rollback命令进行事务的提交与回滚。实际上在JDBC中也存在事务处理，如果要想进行事务处理的话，则必须按照以下的步骤完成。</p>
+<p><strong>JDBC中事务处理的步骤：</strong></p>
+<ol>
+<li><p>要取消掉JDBC的自动提交：void setAutoCommit(boolean autoCommit)</p>
+</li>
+<li><p>执行各个SQL语句，加入到批处理之中</p>
+</li>
+<li><p>如果所有语句执行成功，则提交事务 commit()；如果出现了错误，则回滚：rollback()</p>
+</li>
+</ol>
+<p><strong>核心代码：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">conn.setAutoCommit(<span class="keyword">false</span>); <span class="comment">// 取消自动提交</span></div><div class="line">把SQL语句加入批处理</div><div class="line">stmt.addBatch(…) ()</div><div class="line">stmt.addBatch(…)</div><div class="line"><span class="comment">//执行批处理操作</span></div><div class="line">stmt.executeBatch();</div><div class="line">conn.commit(); <span class="comment">// 提交事务</span></div><div class="line"></div><div class="line"><span class="comment">//如果发生错误</span></div><div class="line">conn.rollback();</div></pre></td></tr></table></figure>
+<p><strong>代码举例：</strong></p>
+<p>首先在sql中创建一个空的数据库，现在在java中，使用PreparedStatement插入数据并修改数据。正常情况下，代码应该这样写：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.vae.jdbc;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.sql.Connection;</div><div class="line"><span class="keyword">import</span> java.sql.DriverManager;</div><div class="line"><span class="keyword">import</span> java.sql.PreparedStatement;</div><div class="line"><span class="keyword">import</span> java.sql.ResultSet;</div><div class="line"><span class="keyword">import</span> java.sql.SQLException;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JDBCtest</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">//数据库连接地址</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String URL = <span class="string">"jdbc:mysql://localhost:3306/JDBCdb"</span>;</div><div class="line">	<span class="comment">//用户名</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String USERNAME = <span class="string">"root"</span>;</div><div class="line">	<span class="comment">//密码</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String PASSWORD = <span class="string">"smyh"</span>;</div><div class="line">	<span class="comment">//驱动类</span></div><div class="line">	<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String DRIVER = <span class="string">"com.mysql.jdbc.Driver"</span>;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">		<span class="comment">//insert(p);</span></div><div class="line">		<span class="comment">//update(p);</span></div><div class="line">		<span class="comment">//delete(3);</span></div><div class="line">		insertAndQuery();</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">//方法：使用PreparedStatement插入数据、更新数据</span></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertAndQuery</span><span class="params">()</span></span>&#123;</div><div class="line">		Connection conn = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			Class.forName(DRIVER);</div><div class="line">			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);</div><div class="line">			String sql1 = <span class="string">"insert into user(name,pwd)values(?,?)"</span>;</div><div class="line">			String sql2 = <span class="string">"update user set pwd=? where name=?"</span>;</div><div class="line">			PreparedStatement ps = conn.prepareStatement(sql1);</div><div class="line">			ps.setString(<span class="number">1</span>, <span class="string">"smyhvae"</span>);</div><div class="line">			ps.setString(<span class="number">2</span>, <span class="string">"007"</span>);            </div><div class="line">			ps.executeUpdate();</div><div class="line"></div><div class="line">			ps = conn.prepareStatement(sql2);</div><div class="line">			ps.setString(<span class="number">1</span>, <span class="string">"008"</span>);</div><div class="line">			ps.setString(<span class="number">2</span>, <span class="string">"smyh"</span>);            </div><div class="line">			ps.executeUpdate();            </div><div class="line"></div><div class="line">			ps.close();</div><div class="line">			conn.close();            </div><div class="line"></div><div class="line">		&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125; <span class="keyword">catch</span> (SQLException e) &#123;</div><div class="line">			e.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>事务处理：</strong></p>
+<p>现在我们把上面的插入操作和修改操作变成一个事务，就要增加一部分代码了。修改上方的insertAndQuery()方法里面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//方法：使用PreparedStatement插入数据、更新数据</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">insertAndQuery</span><span class="params">()</span></span>&#123;</div><div class="line">	Connection conn = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">try</span> &#123;</div><div class="line">		Class.forName(DRIVER);</div><div class="line">		conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);</div><div class="line">		conn.setAutoCommit(<span class="keyword">false</span>);<span class="comment">//设置为手动提交事务</span></div><div class="line">		String sql1 = <span class="string">"insert into user(name,pwd)values(?,?)"</span>;</div><div class="line">		String sql2 = <span class="string">"update user set pwd=? where name=?"</span>;</div><div class="line">		PreparedStatement ps = conn.prepareStatement(sql1);</div><div class="line">		ps.setString(<span class="number">1</span>, <span class="string">"smyhvae"</span>);</div><div class="line">		ps.setString(<span class="number">2</span>, <span class="string">"007"</span>);            </div><div class="line">		ps.executeUpdate();</div><div class="line"></div><div class="line">		ps = conn.prepareStatement(sql2);</div><div class="line">		ps.setString(<span class="number">1</span>, <span class="string">"008"</span>);</div><div class="line">		ps.setString(<span class="number">2</span>, <span class="string">"smyh"</span>);            </div><div class="line">		ps.executeUpdate();            </div><div class="line">		conn.commit(); <span class="comment">//如果所有sql语句成功，则提交事务</span></div><div class="line">		ps.close();</div><div class="line">		conn.close();</div><div class="line"></div><div class="line">	&#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</div><div class="line">		e.printStackTrace();</div><div class="line">	&#125; <span class="keyword">catch</span> (SQLException e) &#123;</div><div class="line">		e.printStackTrace();</div><div class="line">		<span class="keyword">try</span> &#123;</div><div class="line">			conn.rollback();<span class="comment">//只要有一个sql语句出现错误，则将事务回滚</span></div><div class="line">		&#125; <span class="keyword">catch</span> (SQLException e1) &#123;</div><div class="line">			e1.printStackTrace();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>核心代码是第07行、19行、28行。这三行代码就完成了事务处理的操作。两个sql语句中，只要有一个语句出现错误，程序将无法运行，说明事务提交失败，且报错如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/jdbc-transaction.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:40.000Z" itemprop="dateUpdated">2017-07-30 15:00:40</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/07/27/Java笔记-JDBC/" target="_blank" rel="external">http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JDBC/">JDBC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&title=《Java笔记-JDBC》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&title=《Java笔记-JDBC》 — 星之夢&source=JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。
+Hibernate、TopLink..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-JDBC》 — 星之夢&url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2015/07/29/Java笔记-IO流/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Java笔记-IO流</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/07/25/Java数据库开发专题/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java数据库开发专题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&title=《Java笔记-JDBC》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&title=《Java笔记-JDBC》 — 星之夢&source=JDBC是JAVA操作数据库的基本技术，并不是唯一技术。本文将对Java JDBC编程进行总结，希望能对大家有所帮助。
+Hibernate、TopLink..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Java笔记-JDBC》 — 星之夢&url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/07/27/Java笔记-JDBC/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+<!-- Google Analytics -->
+<script>
+window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+ga('create', 'UA-77412363-1', 'auto');
+ga('send', 'pageview');
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->
+
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    <meta name="google-site-verification" content="true">
+    
+    
+    
+    <title>搭建Git服务器 | 星之夢 | 不要轻率地评判他人，否则便容易犯下傲慢之罪。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Git">
+    <meta name="description" content="在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。 Gitolite 工具能够实现用户管理功能。 Gitweb 工具提供一个仓库列表的 Web 界面。 Apache 工具提供智能 http 服务(Smart HTTP)，用于连接Git服务器。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建Git服务器">
+<meta property="og:url" content="http://bestsonic.github.io/2015/08/31/搭建Git服务器/index.html">
+<meta property="og:site_name" content="星之夢">
+<meta property="og:description" content="在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。 Gitolite 工具能够实现用户管理功能。 Gitweb 工具提供一个仓库列表的 Web 界面。 Apache 工具提供智能 http 服务(Smart HTTP)，用于连接Git服务器。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://i.imgur.com/Cf8jJVi.jpg">
+<meta property="og:updated_time" content="2017-07-30T07:00:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建Git服务器">
+<meta name="twitter:description" content="在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。 Gitolite 工具能够实现用户管理功能。 Gitweb 工具提供一个仓库列表的 Web 界面。 Apache 工具提供智能 http 服务(Smart HTTP)，用于连接Git服务器。">
+<meta name="twitter:image" content="http://i.imgur.com/Cf8jJVi.jpg">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Zhong Yibo</h5>
+          <a href="mailto:Bestsonic@sina.com" title="Bestsonic@sina.com" class="mail">Bestsonic@sina.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                Home
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/bestsonic" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://weibo.com/3264372631" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">搭建Git服务器</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">搭建Git服务器</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-08-31T01:30:00.000Z" itemprop="datePublished" class="page-time">
+  2015-08-31
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#服务器配置"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">服务器配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#摘要"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">摘要:</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#配置本机PC-非Git服务器"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置本机PC (非Git服务器)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建RSA密钥对"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">创建RSA密钥对</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#复制公钥到服务器"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">复制公钥到服务器</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#配置Git服务器端"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置Git服务器端</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#服务器基本配置"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">服务器基本配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置Gitolite"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">配置Gitolite</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装GitWeb"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">安装GitWeb</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置Apache"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">配置Apache</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#使用-Git-服务器"><span class="post-toc-number">4.</span> <span class="post-toc-text">使用 Git 服务器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GitWeb-webpage"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">GitWeb webpage</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#以-http方式-克隆仓库"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">以 http方式 克隆仓库</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#管理-Git-服务器的用户和用户组"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">管理 Git 服务器的用户和用户组</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#在-Git-服务器中创建仓库"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">在 Git 服务器中创建仓库</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#从源代码安装Git"><span class="post-toc-number">5.</span> <span class="post-toc-text">从源代码安装Git</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Git服务端的基本配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">Git服务端的基本配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考"><span class="post-toc-number">7.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-搭建Git服务器"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">搭建Git服务器</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-08-31 09:30:00" datetime="2015-08-31T01:30:00.000Z"  itemprop="datePublished">2015-08-31</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。</p>
+<p>Gitolite 工具能够实现用户管理功能。</p>
+<p>Gitweb 工具提供一个仓库列表的 Web 界面。</p>
+<p>Apache 工具提供智能 http 服务(Smart HTTP)，用于连接Git服务器。</p>
+<a id="more"></a>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><hr>
+<p><strong>Git 项目网站:</strong> <a href="http://git-scm.com/" target="_blank" rel="external">http://git-scm.com/</a></p>
+<h2 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h2><p>Arch: i686 / x86_64<br>Packages : Gitolite and Gitweb<br>Git server ip address : 10.82.59.55</p>
+<p>Note:如果能进行域名解析，你也可以使用 Git 服务器主机名。</p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要:"></a>摘要:</h2><p>搭建一个私有 Git 服务器。该服务器能通过ssh和http链接。这里，Gitweb用于浏览仓库细节，而Gitolite则用于Git服务器的用户/组管理。</p>
+<p>Note: 该文章中，# 表示 root用户，$ 表示 git 用户。</p>
+<h1 id="配置本机PC-非Git服务器"><a href="#配置本机PC-非Git服务器" class="headerlink" title="配置本机PC (非Git服务器)"></a>配置本机PC (非Git服务器)</h1><hr>
+<p>搭建步骤如下:</p>
+<p>首先从你的PC开始，<strong>注意不是你的Git服务器</strong>。</p>
+<p>创建 RSA key。</p>
+<h2 id="创建RSA密钥对"><a href="#创建RSA密钥对" class="headerlink" title="创建RSA密钥对"></a>创建RSA密钥对</h2><p>登陆你的PC主机，该机用于远程管理Git服务器。</p>
+<p>如果你的主目录下不存在 .ssh 目录，说明你的 SSH 公钥/私钥对尚未创建。可以用这个命令创建：</p>
+<blockquote>
+<p>ssh-keygen -t rsa -C “Git-Admin”</p>
+</blockquote>
+<p>该命令会在用户主目录下创建 .ssh 目录，并在其中创建两个文件：</p>
+<ul>
+<li>id_rsa 私钥文件。</li>
+</ul>
+<p>是基于 RSA 算法创建。该私钥文件要妥善保管，不要泄漏。</p>
+<ul>
+<li>id_rsa.pub 公钥文件。</li>
+</ul>
+<p>和 id_rsa 文件是一对儿，该文件作为公钥文件，可以公开。</p>
+<p>Note：Git-Admin 为你的pc客户端的Git用户名。</p>
+<h2 id="复制公钥到服务器"><a href="#复制公钥到服务器" class="headerlink" title="复制公钥到服务器"></a>复制公钥到服务器</h2><p>使用 scp 将 id_rsa.pub 复制到 Git服务器上。</p>
+<blockquote>
+<p>\$ scp ~/.ssh/id_rsa.pub root@ip-address-of-git-server:~</p>
+</blockquote>
+<h1 id="配置Git服务器端"><a href="#配置Git服务器端" class="headerlink" title="配置Git服务器端"></a>配置Git服务器端</h1><hr>
+<p>以 root 登陆 Git 服务器。</p>
+<h2 id="服务器基本配置"><a href="#服务器基本配置" class="headerlink" title="服务器基本配置"></a>服务器基本配置</h2><p>安装 Git http 和 perl 依赖。</p>
+<blockquote>
+<p># yum -y install git httpd perl-Time-HiRes perl-Data-Dumper</p>
+</blockquote>
+<p>创建 git 用户，并更改它的 gid 和 uid</p>
+<blockquote>
+<p> # useradd git<br># usermod -u 600 git<br># groupmod -g 600 git</p>
+</blockquote>
+<p>将得到的 id_rsa.pub 改为 Git-Admin.pub。同时将其 mv 到 /home/git 。将它的用户/组更改为git。</p>
+<blockquote>
+<p># mv /root/id_rsa.pub /home/git/Git-Admin.pub ; chown git:git /home/git/Git-Admin.pub</p>
+</blockquote>
+<h2 id="配置Gitolite"><a href="#配置Gitolite" class="headerlink" title="配置Gitolite"></a>配置Gitolite</h2><blockquote>
+<p>登陆git用户，从 github.com 克隆 gitolite。</p>
+<p># su -l git</p>
+<p>\$ whoami<br>(The command will show you log in with which user)</p>
+<p>\$ echo \$HOME<br>(The command will show what is your home directory)</p>
+<p>\$ git clone git://github.com/sitaramc/gitolite</p>
+</blockquote>
+<p>接着创建 bin 目录和设置 Git-Admin 账户</p>
+<p>Note: 将 id_rsa.pub 改为 Git-Admin.pub 的原因是：</p>
+<blockquote>
+<p>the Gitolite will provide same name of user in gitolite.conf file as the name of .pub file.<br>for eg. if I use only id_rsa.pub then “id_rsa” user will be created.</p>
+</blockquote>
+<p>因此，当你需要通过 ssh 添加一个 Git 服务器的用户时，你需要将该用户的 id_rsa.pub 重命名为 user-name.pub。比如，joe的 rsa file 应该被改为 joe.pub (id_rsa.pub –rename–&gt; joe.pub)</p>
+<blockquote>
+<p>\$ mkdir -p /home/git/bin<br>\$ gitolite/install -ln<br>\$ gitolite setup -pk Git-Admin.pub</p>
+</blockquote>
+<p>退出 git 用户。登陆 root 。核对一下 suexec 的默认值。</p>
+<blockquote>
+<p>\$ exit<br>(logout from git user)</p>
+<p># suexec -v</p>
+</blockquote>
+<p>我的Git服务器 suexec 细节.</p>
+<blockquote>
+<p>[root@gitserver ~]# suexec -V<br> -D AP_DOC_ROOT=”/var/www”<br> -D AP_GID_MIN=100<br> -D AP_HTTPD_USER=”apache”<br> -D AP_LOG_EXEC=”/var/log/httpd/suexec.log”<br> -D AP_SAFE_PATH=”/usr/local/bin:/usr/bin:/bin”<br> -D AP_UID_MIN=500<br> -D AP_USERDIR_SUFFIX=”public_html”</p>
+</blockquote>
+<p>创建 bin 目录 （in /var/www ）<br><em>(Why /var/www ? because I got the detail from suexec -V,see parameter AP_DOC_ROOT)</em></p>
+<p>下面的命令将创建一个 /var/www/bin 文件夹（with permission 0755 and owner &amp;group is git）</p>
+<blockquote>
+<p># install -d -m 0755 -o git -g git /var/www/bin</p>
+</blockquote>
+<p>在 /var/www/bin/ 创建一个 gitolite-suexec-wrapper.sh 。然后保存退出。</p>
+<blockquote>
+<p>vi /var/www/bin/gitolite-suexec-wrapper.sh</p>
+<pre><code>#!/bin/bash
+#
+# Suexec wrapper for gitolite-shell
+#
+
+export GIT_PROJECT_ROOT=&quot;/home/git/repositories&quot;
+export GITOLITE_HTTP_HOME=&quot;/home/git&quot;
+
+exec \${GITOLITE_HTTP_HOME}/gitolite/src/gitolite-shell
+</code></pre></blockquote>
+<p>接着修改 /var/www/bin 和 gitolite-suexec-wrapper.sh 的权限</p>
+<blockquote>
+<p># chown -R git:git /var/www/bin<br># chmod 750 /var/www/bin/gitolite-suexec-wrapper.sh<br># chmod 755 /var/www/bin</p>
+</blockquote>
+<p>将 /home/git/.gitolite.rc 里的 UMASK 0077 修改为 UMASK =&gt; 0027</p>
+<blockquote>
+<p>vi /home/git/.gitolite.rc</p>
+<pre><code>UMASK =&gt; 0027,
+</code></pre></blockquote>
+<h2 id="安装GitWeb"><a href="#安装GitWeb" class="headerlink" title="安装GitWeb"></a>安装GitWeb</h2><p>安装 GitWeb</p>
+<blockquote>
+<p>yum install gitweb</p>
+</blockquote>
+<p>默认情况下，Gitweb 会安装在 /var/www/git 目录。（目录下包含 gitweb.cgi 文件）<br>修改 /var/www/git 目录。如下所示：</p>
+<blockquote>
+<p># mv /var/www/git /var/www/html/gitweb</p>
+</blockquote>
+<p>修改 /var/www/html/gitweb 所有者</p>
+<blockquote>
+<p># chown -R git:git /var/www/html/gitweb</p>
+</blockquote>
+<p>下面是我服务器的细节：</p>
+<blockquote>
+<p>[root@gitserver html]# chown -R git:git gitweb/<br>[root@gitserver html]# ls -ld gitweb/<br>drwxr-xr-x 2 git git 4096 Jun  1 12:36 gitweb/<br>[root@gitserver html]# ls -la gitweb/<br>total 252<br>drwxr-xr-x 2 git  git    4096 Jun  1 12:36 .<br>drwxr-xr-x 3 root root   4096 Jun  1 12:34 ..<br>-rw-r–r– 1 git  git     115 Apr 24  2010 git-favicon.png<br>-rw-r–r– 1 git  git     207 Apr 24  2010 git-logo.png<br>-rwxr-xr-x 1 git  git  204754 Jun  1 12:36 gitweb.cgi<br>-rw-r–r– 1 git  git    8379 Apr 24  2010 gitweb.css<br>-rw-r–r– 1 git  git   24142 Apr 24  2010 gitweb.js<br>[root@gitserver html]#</p>
+</blockquote>
+<p>编辑文件 /etc/gitweb.conf  修改其中的两个变量:<br> \$projectroot 和 \$projects_list</p>
+<blockquote>
+<p>vi /etc/gitweb.conf</p>
+<pre><code>our \$projectroot = &quot;/home/git/repositories/&quot;;
+our \$projects_list = &quot;/home/git/projects.list&quot;;
+</code></pre></blockquote>
+<p>修改文件 /var/www/html/gitweb/gitweb.cgi 并修改其中的两个变量:<br> \$projectroot 和 \$projects_list</p>
+<blockquote>
+<p>vi /var/www/html/gitweb/gitweb.cgi</p>
+<pre><code>our \$projectroot = &quot;/home/git/repositories&quot;;
+our \$projects_list = &quot;/home/git/projects.list&quot;;
+</code></pre></blockquote>
+<p>创建一个虚假文件夹（dummy folder git）。注意加上 permissions,owner and group限制。</p>
+<blockquote>
+<p># install -d -m 0755 -o apache -g apache /var/www/git  (This is dummy one)</p>
+</blockquote>
+<h2 id="配置Apache"><a href="#配置Apache" class="headerlink" title="配置Apache"></a>配置Apache</h2><p>打开 /etc/httpd/conf/httpd.conf 。<br>在最后一行加上 VirtualHost 配置。</p>
+<p>Note: 如果你的 Git 服务器有使用主机名和 FQDN，你就可以将 ServerName 和 ServerAlias 前的 # 去掉。然后，写上你的主机信息。ServerAdmin表示管理员的联系邮箱。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">VirtualHost</span> *<span class="attr">:80</span>&gt;</span></div><div class="line"></div><div class="line"># You can comment out the below 3 lines and put correct value as per your server information</div><div class="line">#  ServerName        gitserver.example.com</div><div class="line">#  ServerAlias       gitserver</div><div class="line"></div><div class="line">ServerAdmin       youremailid@example.com</div><div class="line"></div><div class="line">DocumentRoot /var/www/git</div><div class="line"><span class="tag">&lt;<span class="name">Directory</span> /<span class="attr">var</span>/<span class="attr">www</span>/<span class="attr">git</span>&gt;</span></div><div class="line">    Options       None</div><div class="line">    AllowOverride none</div><div class="line">    Order         allow,deny</div><div class="line">    Allow         from all</div><div class="line"></div><div class="line"><span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></div><div class="line"></div><div class="line">SuexecUserGroup git git</div><div class="line">ScriptAlias /git/ /var/www/bin/gitolite-suexec-wrapper.sh/</div><div class="line">ScriptAlias /gitmob/ /var/www/bin/gitolite-suexec-wrapper.sh/</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">Location</span> /<span class="attr">git</span>&gt;</span></div><div class="line">    AuthType Basic</div><div class="line">    AuthName "Git Access"</div><div class="line">    Require valid-user</div><div class="line">    AuthUserFile /etc/httpd/conf/git.passwd</div><div class="line"><span class="tag">&lt;/<span class="name">Location</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">VirtualHost</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>修改 /etc/httpd/conf.d/git.conf 。该文件在安装 Gitweb 时自动创建。<br>下面我将对 Git Server 进行部分修改。<strong>重点！不能落下一步。</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">vi /etc/httpd/conf.d/git.conf</div><div class="line"></div><div class="line">Alias /gitweb /var/www/html/gitweb</div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">Directory</span> /<span class="attr">var</span>/<span class="attr">www</span>/<span class="attr">html</span>/<span class="attr">gitweb</span>&gt;</span></div><div class="line">  Options +ExecCGI</div><div class="line">  AddHandler cgi-script .cgi</div><div class="line">  DirectoryIndex gitweb.cgi</div><div class="line"><span class="tag">&lt;/<span class="name">Directory</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">Location</span> /<span class="attr">gitweb</span>&gt;</span></div><div class="line">   AuthType Basic</div><div class="line">   AuthName "Git Access"</div><div class="line">   Require valid-user</div><div class="line">   AuthUserFile /etc/httpd/conf/git.passwd</div><div class="line"><span class="tag">&lt;/<span class="name">Location</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>下面我们将创建 Apcahe 的管理员的用户密码。<br>当你第一次创建用户时，我们需要使用 -c 符号。-c 表示创建一个新的文件。详细参见htpasswd的man帮助。</p>
+<blockquote>
+<p>   # htpasswd -c /etc/httpd/conf/git.passwd admin</p>
+</blockquote>
+<p>对于添加一个用户或者修改存在的用户密码，不需要添加 -c</p>
+<blockquote>
+<p>   # htpasswd /etc/httpd/conf/git.passwd  user1<br>   # htpasswd /etc/httpd/conf/git.passwd  testuser</p>
+</blockquote>
+<p>当你设置一个 htpasswd user 或 passwd时，需要重启或重载 apache 。<br>chkconfig 命令使 apache 服务开机启动。设置为 runelevel 3 and 5</p>
+<blockquote>
+<p>   ### On CentOS 6.x / RHEL 6.x<br>   /etc/init.d/httpd restart;chkconfig httpd on</p>
+<p>   ### On CentOS 7.x / RHEL 7.x<br>   systemctl restart httpd ; systemctl enable httpd</p>
+</blockquote>
+<p>所有配置已完成，可以使用 Git 服务器了。</p>
+<h1 id="使用-Git-服务器"><a href="#使用-Git-服务器" class="headerlink" title="使用 Git 服务器"></a>使用 Git 服务器</h1><hr>
+<h2 id="GitWeb-webpage"><a href="#GitWeb-webpage" class="headerlink" title="GitWeb webpage"></a>GitWeb webpage</h2><p>使用以下格式访问（网页会要求你输入你设置的 htpasswd 的用户和密码）</p>
+<pre><code>http://ip-address-of-git-server/gitweb/
+</code></pre><h2 id="以-http方式-克隆仓库"><a href="#以-http方式-克隆仓库" class="headerlink" title="以 http方式 克隆仓库"></a>以 http方式 克隆仓库</h2><p>使用命令（网页会要求你输入你设置的 htpasswd 的用户和密码）</p>
+<blockquote>
+<p>   \$ git clone <a href="http://ip-address-of-git-server-OR-FQDN/git/repo-name.git" target="_blank" rel="external">http://ip-address-of-git-server-OR-FQDN/git/repo-name.git</a></p>
+</blockquote>
+<p>上面两个命令的不同之处，</p>
+<ul>
+<li>克隆 Git 仓库时在url中使用 Git</li>
+<li>访问网页时，使用 Gitweb</li>
+</ul>
+<p>Note: 如果你想要学习为什么使用 Git 或 Gitweb，请打开 git.conf 和 httpd.conf 文件。</p>
+<ul>
+<li><p>git.conf中 “Alias /gitweb /var/www/html/gitweb”</p>
+</li>
+<li><p>httpd.conf中 “ScriptAlias /git/ /var/www/bin/gitolite-suexec-wrapper.sh/”</p>
+</li>
+</ul>
+<p>然后将testing.git克隆到桌面上或其他目录</p>
+<blockquote>
+<p>   \$ cd ~/Desktop<br>   \$ git clone <a href="http://ip-address-of-git-server-OR-FQDN/git/testing.git" target="_blank" rel="external">http://ip-address-of-git-server-OR-FQDN/git/testing.git</a></p>
+</blockquote>
+<h2 id="管理-Git-服务器的用户和用户组"><a href="#管理-Git-服务器的用户和用户组" class="headerlink" title="管理 Git 服务器的用户和用户组"></a>管理 Git 服务器的用户和用户组</h2><p>为了管理 Git 服务器的用户和用户组，你需要克隆 Gitolite-admin 到你的pc上。<strong>注意，该PC必须是你在 Step A 和 Step B中使用的PC。</strong></p>
+<p>这里我将复制 Gitolite-admin 到桌面。</p>
+<blockquote>
+<p>   \$ cd ~/Desktop<br>   \$ git config –global user.name “Git-Admin”<br>   \$ git config –global user.email “youremailid@example.com”<br>   \$ git clone git@GitServerIP-or-FQDN:gitolite-admin.git</p>
+</blockquote>
+<p>通过配置 gitolite.conf 文件来管理访问 Git 服务器的用户和用户组。<br>当你对 gitolite.conf 文件进行了如何修改，你都需要进行 <strong>git push</strong> 操作</p>
+<p>下面是我电脑的配置参考</p>
+<blockquote>
+<p>sharad@mypc:~/Desktop/gitolite-admin/conf\$ pwd<br>/home/sharad/Desktop/gitolite-admin/conf</p>
+<p>sharad@sharad-sapplica:~/Desktop/gitolite-admin/conf\$ cat gitolite.conf</p>
+<pre><code>repo gitolite-admin
+    RW+     =   Git-Admin
+
+repo testing
+    RW+     =   @all
+    R       =   git daemon
+</code></pre><p>sharad@mypc:~/Desktop/gitolite-admin/conf\$</p>
+</blockquote>
+<p>这里 R 和 W 的意义：</p>
+<ul>
+<li>R = Read</li>
+<li>W = Write</li>
+</ul>
+<p>现在将这些修改 push 到 Git服务器上。</p>
+<blockquote>
+<p>   \$ cd ~/Desktop/gitolite-admin/conf<br>   \$ ls -l gitolite.conf</p>
+<p>   \$ git add gitolite.conf<br>   \$ git commit -m “first commit”<br>   \$ git push origin master</p>
+</blockquote>
+<h2 id="在-Git-服务器中创建仓库"><a href="#在-Git-服务器中创建仓库" class="headerlink" title="在 Git 服务器中创建仓库"></a>在 Git 服务器中创建仓库</h2><p>我们创建一个 “linux” 仓库</p>
+<ol>
+<li>以 root 方式登陆 Git 服务器，然后切换到 git 用户</li>
+</ol>
+<blockquote>
+<p>   # su -l git<br>   \$ cd repositories<br>   \$ mkdir linux.git<br>   \$ cd linux.git<br>   \$ git –bare init<br>   \$ git update-server-info</p>
+</blockquote>
+<ol>
+<li>Update projects.list 文件</li>
+</ol>
+<p>更新 projects.list 文件。在该文件中添加你刚刚新建的 Git 仓库名。</p>
+<blockquote>
+<p>   vi /home/git/projects.list<br>     testing.git<br>     linux.git</p>
+</blockquote>
+<p>完成 update 操作后，你就可以在 GitWeb 上看到新的 repository 了。</p>
+<p>如下图所示</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://i.imgur.com/Cf8jJVi.jpg" alt="git_server" title="">
+                </div>
+                <div class="image-caption">git_server</div>
+            </figure>
+<p>Note: 当 Gitweb 出现 404 – No projects found 时，需要关闭 SElinux 。</p>
+<h1 id="从源代码安装Git"><a href="#从源代码安装Git" class="headerlink" title="从源代码安装Git"></a>从源代码安装Git</h1><hr>
+<p>有人觉得从源码安装 Git 更实用，因为你能得到最新的版本。 二进制安装程序倾向于有一些滞后，当然近几年 Git 已经成熟，这个差异不再显著。</p>
+<p>如果你想从源码安装 Git，需要安装 Git 依赖的库：curl、zlib、openssl、expat，还有libiconv。 如果你的系统上有 yum （如 Fedora）或者 apt-get（如基于 Debian 的系统），可以使用以下命令之一来安装最小化的依赖包来编译和安装 Git 的二进制版：</p>
+<blockquote>
+<p>  \$ sudo yum install curl-devel expat-devel gettext-devel \<br>    openssl-devel zlib-devel<br>  \$ sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext \<br>    libz-dev libssl-dev</p>
+</blockquote>
+<p>为了能够添加更多格式的文档（如 doc, html, info），你需要安装以下的依赖包：</p>
+<blockquote>
+<p>  \$ sudo yum install asciidoc xmlto docbook2x<br>  \$ sudo apt-get install asciidoc xmlto docbook2x</p>
+</blockquote>
+<p>当你安装好所有的必要依赖，你可以继续从几个地方来取得最新发布版本的 tar 包。 你可以从 Kernel.org 网站获取，网址为 <a href="https://www.kernel.org/pub/software/scm/git" target="_blank" rel="external">https://www.kernel.org/pub/software/scm/git</a> ，或从 GitHub 网站上的镜像来获得，网址为 <a href="https://github.com/git/git/releases" target="_blank" rel="external">https://github.com/git/git/releases</a> 。 通常在 GitHub 上的是最新版本，但 kernel.org 上包含有文件下载签名，如果你想验证下载正确性的话会用到。</p>
+<p>接着，编译并安装：</p>
+<blockquote>
+<p>  \$ tar -zxf git-2.0.0.tar.gz<br>  \$ cd git-2.0.0<br>  \$ make configure<br>  \$ ./configure –prefix=/usr<br>  \$ make all doc info<br>  \$ sudo make install install-doc install-html install-info</p>
+</blockquote>
+<p>完成后，你可以使用 Git 来获取 Git 的升级：</p>
+<blockquote>
+<p>  \$ git clone git://git.kernel.org/pub/scm/git/git.git</p>
+</blockquote>
+<h1 id="Git服务端的基本配置"><a href="#Git服务端的基本配置" class="headerlink" title="Git服务端的基本配置"></a>Git服务端的基本配置</h1><hr>
+<p>我们来看看如何配置服务器端的 SSH 访问。 本例中，我们将使用 authorized_keys 方法来对用户进行认证。 同时我们假设你使用的操作系统是标准的 Linux 发行版，比如 Ubuntu。 首先，创建一个操作系统用户 git，并为其建立一个 .ssh 目录。</p>
+<blockquote>
+<p>\$ sudo adduser git<br>\$ su git<br>\$ cd<br>\$ mkdir .ssh &amp;&amp; chmod 700 .ssh<br>\$ touch .ssh/authorized_keys &amp;&amp; chmod 600 .ssh/authorized_keys</p>
+</blockquote>
+<p>接着，我们需要为系统用户 git 的 authorized_keys 文件添加一些开发者 SSH 公钥。 假设我们已经获得了若干受信任的公钥，并将它们保存在临时文件中。 与前文类似，这些公钥看起来是这样的：</p>
+<blockquote>
+<p>\$ cat /tmp/id_rsa.john.pub<br>ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCB007n/ww+ouN4gSLKssMxXnBOvf9LGt4L<br>ojG6rs6hPB09j9R/T17/x4lhJA0F3FR1rP6kYBRsWj2aThGw6HXLm9/5zytK6Ztg3RPKK+4k<br>Yjh6541NYsnEAZuXz0jTTyAUfrtU3Z5E003C4oxOj6H0rfIF1kKI9MAQLMdpGW1GYEIgS9Ez<br>Sdfd8AcCIicTDWbqLAcU4UpkaX8KyGlLwsNuuGztobF8m72ALC/nLF6JLtPofwFBlgc+myiv<br>O7TCUSBdLQlgMVOFq1I2uPWQOkOWQAHukEOmfjy2jctxSDBQ220ymjaNsHT4kgtZg2AYYgPq<br>dAv8JggJICUvax2T9va5 gsg-keypair</p>
+</blockquote>
+<p>将这些公钥加入系统用户 git 的 .ssh 目录下 authorized_keys 文件的末尾：</p>
+<blockquote>
+<p>\$ cat /tmp/id_rsa.john.pub &gt;~/.ssh/authorized_keys<br>\$ cat /tmp/id_rsa.josie.pub &gt;~/.ssh/authorized_keys<br>\$ cat /tmp/id_rsa.jessica.pub &gt;~/.ssh/authorized_keys</p>
+</blockquote>
+<p>现在我们来为开发者新建一个空仓库。可以借助带 –bare 选项的 git init 命令来做到这一点，该命令在初始化仓库时不会创建工作目录：</p>
+<blockquote>
+<p>\$ cd /opt/git<br>\$ mkdir project.git<br>\$ cd project.git<br>\$ git init –bare<br>Initialized empty Git repository in /opt/git/project.git/</p>
+</blockquote>
+<p>接着，John、Josie 或者 Jessica 中的任意一人可以将他们项目的最初版本推送到这个仓库中，他只需将此仓库设置为项目的远程仓库并向其推送分支。 请注意，每添加一个新项目，都需要有人登录服务器取得 shell，并创建一个裸仓库。 我们假定这个设置了 git 用户和 Git 仓库的服务器使用 gitserver 作为主机名。 同时，假设该服务器运行在内网，并且你已在 DNS 配置中将 gitserver 指向此服务器。那么我们可以运行如下命令（假定 myproject 是已有项目且其中已包含文件）：</p>
+<blockquote>
+<p># on John’s computer<br>\$ cd myproject<br>\$ git init<br>\$ git add .<br>\$ git commit -m ‘initial commit’<br>\$ git remote add origin git@gitserver:/opt/git/project.git<br>\$ git push origin master</p>
+</blockquote>
+<p>此时，其他开发者可以克隆此仓库，并推回各自的改动，步骤很简单：</p>
+<blockquote>
+<p>\$ git clone git@gitserver:/opt/git/project.git<br>\$ cd project<br>\$ vim README<br>\$ git commit -am ‘fix for the README file’<br>\$ git push origin master</p>
+</blockquote>
+<p>通过这种方法，你可以快速搭建一个具有读写权限、面向多个开发者的 Git 服务器。</p>
+<p>需要注意的是，目前所有（获得授权的）开发者用户都能以系统用户 git 的身份登录服务器从而获得一个普通 shell。 如果你想对此加以限制，则需要修改 passwd 文件中（git 用户所对应）的 shell 值。</p>
+<p>借助一个名为 git-shell 的受限 shell 工具，你可以方便地将用户 git 的活动限制在与 Git 相关的范围内。该工具随 Git 软件包一同提供。 如果将 git-shell 设置为用户 git 的登录 shell（login shell），那么用户 git 便不能获得此服务器的普通 shell 访问权限。 若要使用 git-shell，需要用它替换掉 bash 或 csh，使其成为系统用户的登录 shell。 为进行上述操作，首先你必须确保 git-shell 已存在于 /etc/shells 文件中：</p>
+<blockquote>
+<p>\$ cat /etc/shells   # see if <code>git-shell</code> is already in there.  If not…<br>\$ which git-shell   # make sure git-shell is installed on your system.<br>\$ sudo vim /etc/shells  # and add the path to git-shell from last command</p>
+</blockquote>
+<p>现在你可以使用 chsh <username> 命令修改任一系统用户的 shell：</username></p>
+<blockquote>
+<p>\$ sudo chsh git  # and enter the path to git-shell, usually: /usr/bin/git-shell</p>
+</blockquote>
+<p>这样，用户 git 就只能利用 SSH 连接对 Git 仓库进行推送和拉取操作，而不能登录机器并取得普通 shell。 如果试图登录，你会发现尝试被拒绝，像这样：</p>
+<blockquote>
+<p>\$ ssh git@gitserver<br>fatal: Interactive git shell is not enabled.<br>hint: ~/git-shell-commands should exist and have read and execute access.<br>Connection to gitserver closed.</p>
+</blockquote>
+<p>现在，网络相关的 Git 命令依然能够正常工作，但是开发者用户已经无法得到一个普通 shell 了。 正如输出信息所提示的，你也可以在 git 用户的家目录下建立一个目录，来对 git-shell 命令进行一定程度的自定义。 比如，你可以限制掉某些本应被服务器接受的 Git 命令，或者对刚才的 SSH 拒绝登录信息进行自定义，这样，当有开发者用户以类似方式尝试登录时，便会看到你的信息。 要了解更多有关自定义 shell 的信息，请运行 git help shell。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><hr>
+<p><a href="http://sharadchhetri.com/2013/06/01/how-to-install-own-git-server-with-ssh-and-http-access-by-using-gitolite-and-gitweb-in-centos/" target="_blank" rel="external">How to install own git server with ssh and http access by using gitolite and gitweb in CentOS</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-07-30T07:00:03.000Z" itemprop="dateUpdated">2017-07-30 15:00:03</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2015/08/31/搭建Git服务器/" target="_blank" rel="external">http://bestsonic.github.io/2015/08/31/搭建Git服务器/</a>
+        
+    </div>
+    <footer>
+        <a href="http://bestsonic.github.io">
+            <img src="/img/avatar.jpg" alt="Zhong Yibo">
+            Zhong Yibo
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&title=《搭建Git服务器》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&title=《搭建Git服务器》 — 星之夢&source=在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。
+Gi..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/31/搭建Git服务器/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《搭建Git服务器》 — 星之夢&url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/08/11/SpringMVC-入门/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Java笔记-JDBC</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+<section class="comments" id="comments">
+    <!-- UY BEGIN -->
+    <div id="uyan_frame"></div>
+    <script src="http://v2.uyan.cc/code/uyan.js?uid=2140269"></script>
+    <!-- UY END -->
+</section>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢土豪(✪ω✪)~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Zhong Yibo &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&title=《搭建Git服务器》 — 星之夢&pic=http://bestsonic.github.io/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&title=《搭建Git服务器》 — 星之夢&source=在本教程中，您可以了解如何通过 Gitolite 和 Gitweb 工具来安装一个Git服务器，该服务器可通过 ssh 和 http 协议进行访问。
+Gi..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://bestsonic.github.io/2015/08/31/搭建Git服务器/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《搭建Git服务器》 — 星之夢&url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/&via=http://bestsonic.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://bestsonic.github.io/2015/08/31/搭建Git服务器/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://bestsonic.github.io/2015/08/31/搭建Git服务器/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1259030806&web_id=1259030806')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'o(TωT)o 去哪里啦? 快回来';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(O_O)?咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
